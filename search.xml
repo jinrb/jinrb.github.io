@@ -15,6 +15,53 @@
 ]]></content>
   </entry>
   <entry>
+    <title>git笔记</title>
+    <url>/2020/05/03/git%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>1.执行初始化命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>2.管理目录下文件的状态 (注意：新增或者修改的文件会变红)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p>3.提交缓、暂存区</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<p>4.提交版本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git commit -m &#39;描述信息&#39;</span><br></pre></td></tr></table></figure>
+<p>5.查看日志</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git log</span><br></pre></td></tr></table></figure>
+<p>6.回滚到之前版本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git log</span><br><span class="line">git reset --hard 版本号</span><br></pre></td></tr></table></figure>
+<p>7.回滚到之后的版本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reflog</span><br><span class="line">git reset --hard 版本号</span><br></pre></td></tr></table></figure>
+<p>8.查看分支</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
+<p>9.创建分支</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch 分支名称</span><br></pre></td></tr></table></figure>
+<p>10.切换分支</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout 分支名称</span><br><span class="line">git checkout -b 新分支名称  创建并且切换分支</span><br></pre></td></tr></table></figure>
+<p>11.分支合并</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git merge 要合并的分支名称</span><br></pre></td></tr></table></figure>
+<p>12.删除分支</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch -d 分支名称</span><br></pre></td></tr></table></figure>
+<p>13.给远程仓库起别名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote add origin 远程仓库</span><br></pre></td></tr></table></figure>
+<p>14.克隆远程远程仓库代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone 远程代码地址（内部已实现 git remote add origin 远程仓库）</span><br></pre></td></tr></table></figure>
+<p>15.像远程仓库推送代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git push -u origin 分支</span><br></pre></td></tr></table></figure>
+<p>16.像远程拉最新代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull origin 分支</span><br><span class="line">等价于</span><br><span class="line">git fetch origin 分支</span><br><span class="line">git merge origin&#x2F;分支</span><br></pre></td></tr></table></figure>
+<p>17.日志格式化设置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git log --graph --pretty&#x3D;format:&quot;%h %s&quot;</span><br></pre></td></tr></table></figure>
+<p>18.tag</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git tag -a v1.0 -m &#39;版本介绍&#39;   创建本地tag信息</span><br><span class="line">git tag -d v1.0                删除tag</span><br><span class="line">git push origin --tag          将本地tag信息推送到远程仓库</span><br><span class="line">git pull origin --tag          更新本地tag版本信息</span><br><span class="line"></span><br><span class="line">git chechout v1.0              切换tag</span><br><span class="line">git clone -b v1.0              指定tag下载代码</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>markdowm一些用法</title>
     <url>/2020/01/03/markdowm/</url>
     <content><![CDATA[<p>1.标题 可以用等于号= 减号- 井号# 来表示：<br><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">这是一级标题</span><br><span class="line">========</span><br><span class="line">这是二级标题</span><br><span class="line">-------</span><br><span class="line"></span><br><span class="line"><span class="section"># 这是一级标题</span></span><br><span class="line"><span class="section">## 这是二级标题</span></span><br><span class="line"><span class="section">### 这是三级标题</span></span><br><span class="line"><span class="section">#### 这是四级标题</span></span><br><span class="line"><span class="section">##### 这是五级标题</span></span><br><span class="line"><span class="section">###### 这是六级标题</span></span><br></pre></td></tr></table></figure></p>
@@ -98,9 +145,9 @@
 </div>
 <p>11.markdown 转译这些符号前面加上反斜杠来帮助插入普通的符号<br><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">\   反斜线</span><br><span class="line">`   反引号</span><br><span class="line"><span class="bullet">*   </span>星号</span><br><span class="line">_   下划线</span><br><span class="line">&#123;&#125;  花括号</span><br><span class="line">[]  方括号</span><br><span class="line">()  小括号</span><br><span class="line"><span class="section">#   井字号</span></span><br><span class="line"><span class="bullet">+   </span>加号</span><br><span class="line"><span class="bullet">-   </span>减号</span><br><span class="line">.   英文句点</span><br><span class="line">!   感叹号</span><br></pre></td></tr></table></figure><br><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">代码</span><br><span class="line">\\   反斜线</span><br><span class="line">\`   反引号</span><br><span class="line">\*   星号</span><br><span class="line">\_   下划线</span><br><span class="line">\&#123;\&#125;  花括号</span><br><span class="line">\[\]  方括号</span><br><span class="line">\(\)  小括号</span><br><span class="line">\#   井字号</span><br><span class="line">\+   加号</span><br><span class="line">\-   减号</span><br><span class="line">\.   英文句点</span><br><span class="line">\!   感叹号</span><br></pre></td></tr></table></figure><br>\   反斜线<br>`   反引号<br>*   星号<br>_   下划线<br>{}  花括号<br>[]  方括号<br>()  小括号<br>#   井字号<br>+   加号<br>-   减号<br>.   英文句点<br>!   感叹号</p>
 ]]></content>
-      <tags>
-        <tag>笔记</tag>
-      </tags>
+      <categories>
+        <category>笔记</category>
+      </categories>
   </entry>
   <entry>
     <title>test</title>
