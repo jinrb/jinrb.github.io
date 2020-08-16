@@ -1,18 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/01/02/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
+    <title>adb笔记</title>
+    <url>/2020/08/16/adb/</url>
+    <content><![CDATA[<h5 id="1、查询已连接设备-模拟器"><a href="#1、查询已连接设备-模拟器" class="headerlink" title="1、查询已连接设备/模拟器"></a>1、查询已连接设备/模拟器</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb devices</span><br></pre></td></tr></table></figure>
+<h5 id="2、指定设备获取屏幕分辨率"><a href="#2、指定设备获取屏幕分辨率" class="headerlink" title="2、指定设备获取屏幕分辨率"></a>2、指定设备获取屏幕分辨率</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb -s 设备号 shell wm size</span><br></pre></td></tr></table></figure>
+<h5 id="3、给指定设备安装应用"><a href="#3、给指定设备安装应用" class="headerlink" title="3、给指定设备安装应用"></a>3、给指定设备安装应用</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb -s 设备号 install test.apk</span><br></pre></td></tr></table></figure>
+<h5 id="4、启动-adb-server-命令"><a href="#4、启动-adb-server-命令" class="headerlink" title="4、启动 adb server 命令"></a>4、启动 adb server 命令</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb start-server</span><br></pre></td></tr></table></figure>
+<h5 id="5、停止-adb-server-命令"><a href="#5、停止-adb-server-命令" class="headerlink" title="5、停止 adb server 命令"></a>5、停止 adb server 命令</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb kill-server</span><br></pre></td></tr></table></figure>
+<h5 id="6、查看adb版本"><a href="#6、查看adb版本" class="headerlink" title="6、查看adb版本"></a>6、查看adb版本</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb version</span><br></pre></td></tr></table></figure>
+<h5 id="7、指定-adb-server-的网络端口"><a href="#7、指定-adb-server-的网络端口" class="headerlink" title="7、指定 adb server 的网络端口"></a>7、指定 adb server 的网络端口</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb -P &lt;port&gt; start-server</span><br></pre></td></tr></table></figure>
+<h5 id="8、通过-IP-地址连接设备"><a href="#8、通过-IP-地址连接设备" class="headerlink" title="8、通过 IP 地址连接设备"></a>8、通过 IP 地址连接设备</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb connect &lt;device-ip-address&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="9、断开无线连接"><a href="#9、断开无线连接" class="headerlink" title="9、断开无线连接"></a>9、断开无线连接</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb disconnect &lt;device-ip-address&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="10、查看所有应用"><a href="#10、查看所有应用" class="headerlink" title="10、查看所有应用"></a>10、查看所有应用</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell pm list packages</span><br></pre></td></tr></table></figure>
+<h5 id="11、查看系统应用"><a href="#11、查看系统应用" class="headerlink" title="11、查看系统应用"></a>11、查看系统应用</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell pm list packages -s</span><br></pre></td></tr></table></figure>
+<h5 id="12、查看第三方应用"><a href="#12、查看第三方应用" class="headerlink" title="12、查看第三方应用"></a>12、查看第三方应用</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell pm list packages -3</span><br></pre></td></tr></table></figure>
+<h5 id="13、卸载应用（-表示应用的包名，-k-参数可选，表示卸载应用但保留数据和缓存目录。）"><a href="#13、卸载应用（-表示应用的包名，-k-参数可选，表示卸载应用但保留数据和缓存目录。）" class="headerlink" title="13、卸载应用（ 表示应用的包名，-k 参数可选，表示卸载应用但保留数据和缓存目录。）"></a>13、卸载应用（<packagename> 表示应用的包名，-k 参数可选，表示卸载应用但保留数据和缓存目录。）</packagename></h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb uninstall [-k] &lt;packagename&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="14、清除应用数据与缓存"><a href="#14、清除应用数据与缓存" class="headerlink" title="14、清除应用数据与缓存"></a>14、清除应用数据与缓存</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell pm clear &lt;packagename&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="15、复制设备里的文件到电脑"><a href="#15、复制设备里的文件到电脑" class="headerlink" title="15、复制设备里的文件到电脑"></a>15、复制设备里的文件到电脑</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb pull &lt;设备里的文件路径&gt; [电脑上的目录]</span><br></pre></td></tr></table></figure>
+<h5 id="16、复制电脑里的文件到设备"><a href="#16、复制电脑里的文件到设备" class="headerlink" title="16、复制电脑里的文件到设备"></a>16、复制电脑里的文件到设备</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb push &lt;电脑上的文件路径&gt; &lt;设备里的目录&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="17、电源键"><a href="#17、电源键" class="headerlink" title="17、电源键"></a>17、电源键</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 26</span><br></pre></td></tr></table></figure>
+<h5 id="18、菜单键"><a href="#18、菜单键" class="headerlink" title="18、菜单键"></a>18、菜单键</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 82</span><br></pre></td></tr></table></figure>
+<h5 id="19、HOME-键"><a href="#19、HOME-键" class="headerlink" title="19、HOME 键"></a>19、HOME 键</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 3</span><br></pre></td></tr></table></figure>
+<h5 id="20、返回键"><a href="#20、返回键" class="headerlink" title="20、返回键"></a>20、返回键</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 4</span><br></pre></td></tr></table></figure>
+<h5 id="21、增加音量"><a href="#21、增加音量" class="headerlink" title="21、增加音量"></a>21、增加音量</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 24</span><br></pre></td></tr></table></figure>
+<h5 id="22、降低音量"><a href="#22、降低音量" class="headerlink" title="22、降低音量"></a>22、降低音量</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 25</span><br></pre></td></tr></table></figure>
+<h5 id="23、静音"><a href="#23、静音" class="headerlink" title="23、静音"></a>23、静音</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 164</span><br></pre></td></tr></table></figure>
+<h5 id="24、播放-暂停"><a href="#24、播放-暂停" class="headerlink" title="24、播放/暂停"></a>24、播放/暂停</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 85</span><br></pre></td></tr></table></figure>
+<h5 id="25、停止播放"><a href="#25、停止播放" class="headerlink" title="25、停止播放"></a>25、停止播放</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 86</span><br></pre></td></tr></table></figure>
+<h5 id="26、播放下一首"><a href="#26、播放下一首" class="headerlink" title="26、播放下一首"></a>26、播放下一首</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 87</span><br></pre></td></tr></table></figure>
+<h5 id="27、播放上一首"><a href="#27、播放上一首" class="headerlink" title="27、播放上一首"></a>27、播放上一首</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 88</span><br></pre></td></tr></table></figure>
+<h5 id="28、恢复播放"><a href="#28、恢复播放" class="headerlink" title="28、恢复播放"></a>28、恢复播放</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 126</span><br></pre></td></tr></table></figure>
+<h5 id="29、暂停播放"><a href="#29、暂停播放" class="headerlink" title="29、暂停播放"></a>29、暂停播放</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input keyevent 127</span><br></pre></td></tr></table></figure>
+<h5 id="30、滑动解锁（参数-300-1000-300-500-分别表示起始点x坐标-起始点y坐标-结束点x坐标-结束点y坐标。）"><a href="#30、滑动解锁（参数-300-1000-300-500-分别表示起始点x坐标-起始点y坐标-结束点x坐标-结束点y坐标。）" class="headerlink" title="30、滑动解锁（参数 300 1000 300 500 分别表示起始点x坐标 起始点y坐标 结束点x坐标 结束点y坐标。）"></a>30、滑动解锁（参数 300 1000 300 500 分别表示起始点x坐标 起始点y坐标 结束点x坐标 结束点y坐标。）</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input swipe 300 1000 300 500</span><br></pre></td></tr></table></figure>
+<h5 id="31、输入文本"><a href="#31、输入文本" class="headerlink" title="31、输入文本"></a>31、输入文本</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell input text hello</span><br></pre></td></tr></table></figure>
+<h5 id="32、清空日志"><a href="#32、清空日志" class="headerlink" title="32、清空日志"></a>32、清空日志</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb logcat -c</span><br></pre></td></tr></table></figure>
+<h5 id="33、查看设备型号"><a href="#33、查看设备型号" class="headerlink" title="33、查看设备型号"></a>33、查看设备型号</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell getprop ro.product.model</span><br></pre></td></tr></table></figure>
+<h5 id="34、电池状况"><a href="#34、电池状况" class="headerlink" title="34、电池状况"></a>34、电池状况</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell dumpsys battery</span><br></pre></td></tr></table></figure>
+<h5 id="35、屏幕分辨率"><a href="#35、屏幕分辨率" class="headerlink" title="35、屏幕分辨率"></a>35、屏幕分辨率</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell wm size</span><br></pre></td></tr></table></figure>
+<h5 id="36、屏幕密度"><a href="#36、屏幕密度" class="headerlink" title="36、屏幕密度"></a>36、屏幕密度</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell wm density</span><br></pre></td></tr></table></figure>
+<h5 id="37、显示屏参数"><a href="#37、显示屏参数" class="headerlink" title="37、显示屏参数"></a>37、显示屏参数</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell dumpsys window displays</span><br></pre></td></tr></table></figure>
+<h5 id="38、查看Android-系统版本"><a href="#38、查看Android-系统版本" class="headerlink" title="38、查看Android 系统版本"></a>38、查看Android 系统版本</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell getprop ro.build.version.release</span><br></pre></td></tr></table></figure>
+<h5 id="39、查看IP-地址"><a href="#39、查看IP-地址" class="headerlink" title="39、查看IP 地址"></a>39、查看IP 地址</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell ifconfig | grep Mask</span><br></pre></td></tr></table></figure>
+<h5 id="40、Mac-地址"><a href="#40、Mac-地址" class="headerlink" title="40、Mac 地址"></a>40、Mac 地址</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell cat &#x2F;sys&#x2F;class&#x2F;net&#x2F;wlan0&#x2F;address</span><br></pre></td></tr></table></figure>
+<h5 id="41、CPU-信息"><a href="#41、CPU-信息" class="headerlink" title="41、CPU 信息"></a>41、CPU 信息</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell cat &#x2F;proc&#x2F;cpuinfo</span><br></pre></td></tr></table></figure>
+<h5 id="42、内存信息"><a href="#42、内存信息" class="headerlink" title="42、内存信息"></a>42、内存信息</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell cat &#x2F;proc&#x2F;meminfo</span><br></pre></td></tr></table></figure>
+<h5 id="43、使用-Monkey-进行压力测试（表示向-指定的应用程序发送-500-个伪随机事件。）"><a href="#43、使用-Monkey-进行压力测试（表示向-指定的应用程序发送-500-个伪随机事件。）" class="headerlink" title="43、使用 Monkey 进行压力测试（表示向  指定的应用程序发送 500 个伪随机事件。）"></a>43、使用 Monkey 进行压力测试（表示向 <packagename> 指定的应用程序发送 500 个伪随机事件。）</packagename></h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell monkey -p &lt;packagename&gt; -v 500</span><br></pre></td></tr></table></figure>
+<h5 id="44、查看进程"><a href="#44、查看进程" class="headerlink" title="44、查看进程"></a>44、查看进程</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell ps</span><br></pre></td></tr></table></figure>
+<h5 id="45、查看实时资源占用情况"><a href="#45、查看实时资源占用情况" class="headerlink" title="45、查看实时资源占用情况"></a>45、查看实时资源占用情况</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb shell top</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>adb</tag>
+      </tags>
   </entry>
   <entry>
     <title>git笔记</title>
@@ -60,6 +101,20 @@
       <tags>
         <tag>git</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/01/02/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>markdowm一些用法</title>
@@ -148,14 +203,5 @@
       <categories>
         <category>笔记</category>
       </categories>
-  </entry>
-  <entry>
-    <title>test</title>
-    <url>/2020/01/08/test/</url>
-    <content><![CDATA[<h2 id="图片上传测试"><a href="#图片上传测试" class="headerlink" title="图片上传测试"></a>图片上传测试</h2><p><img src="/2020/01/08/test/pikapika.jpg" alt="皮卡秋"></p>
-]]></content>
-      <tags>
-        <tag>测试</tag>
-      </tags>
   </entry>
 </search>
