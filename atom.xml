@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-16T14:40:42.748Z</updated>
+  <updated>2020-08-16T14:49:49.859Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android电脑环境</title>
+    <link href="http://yoursite.com/2020/08/16/Android%E7%94%B5%E8%84%91%E7%8E%AF%E5%A2%83/"/>
+    <id>http://yoursite.com/2020/08/16/Android%E7%94%B5%E8%84%91%E7%8E%AF%E5%A2%83/</id>
+    <published>2020-08-16T14:47:45.000Z</published>
+    <updated>2020-08-16T14:49:49.859Z</updated>
+    
+    <content type="html"><![CDATA[<h5 id="1-下载安装kali"><a href="#1-下载安装kali" class="headerlink" title="1.下载安装kali"></a>1.下载安装kali</h5><p>账号 root 密码 root</p><h5 id="2-修改时区"><a href="#2-修改时区" class="headerlink" title="2.修改时区"></a>2.修改时区</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dpkg-reconfigure tzdata</span><br><span class="line">然后选择 Asia&#x2F;Shanghai</span><br></pre></td></tr></table></figure><h5 id="3-安装中文字体"><a href="#3-安装中文字体" class="headerlink" title="3.安装中文字体"></a>3.安装中文字体</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install xfonts-intl-chinese</span><br><span class="line">apt install ttf-wqy-microhei</span><br></pre></td></tr></table></figure><h5 id="4-kali-修改名字"><a href="#4-kali-修改名字" class="headerlink" title="4.kali 修改名字"></a>4.kali 修改名字</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nano &#x2F;etc&#x2F;hostname</span><br><span class="line">修改名称 JRB</span><br><span class="line">ctrl x 退出</span><br></pre></td></tr></table></figure><h5 id="5-安装-Android-studio"><a href="#5-安装-Android-studio" class="headerlink" title="5.安装 Android studio"></a>5.安装 Android studio</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">第一步</span><br><span class="line">wget https:&#x2F;&#x2F;redirector.gvt1.com&#x2F;edgedl&#x2F;android&#x2F;studio&#x2F;ide-zips&#x2F;4.0.0.16&#x2F;android-studio-ide-193.6514223-linux.tar.gz</span><br><span class="line">第二步</span><br><span class="line">tar zxvf android-studio-ide-193.6514223-linux.tar.gz</span><br></pre></td></tr></table></figure><h5 id="6-安装其他工具"><a href="#6-安装其他工具" class="headerlink" title="6.安装其他工具"></a>6.安装其他工具</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install tmux jnettop htop</span><br></pre></td></tr></table></figure><h5 id="7-kali安装科学"><a href="#7-kali安装科学" class="headerlink" title="7.kali安装科学"></a>7.kali安装科学</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1.在 window 的cmd 输入ipconfig 查看 本机地址</span><br><span class="line">  例如看到：</span><br><span class="line">  IPv4 地址 . . . . . . . . . . . . : 192.168.1.100</span><br><span class="line"></span><br><span class="line">2.在 跟目录下 输入 nano &#x2F;etc&#x2F;proxychains.conf</span><br><span class="line">   注释 proxy_dns</span><br><span class="line">   注释 scok4 127.0.0.1 9050</span><br><span class="line">   添加 scok5 192.168.1.100 1080</span><br><span class="line">   ctrl x 退出 </span><br><span class="line">   proxychains curl ip.sb</span><br><span class="line">   ping 192.168.1.12  # 检查ip</span><br><span class="line">   telnet 192.168.1.12 1080  # 检查端口</span><br></pre></td></tr></table></figure><h5 id="8-第一个app安装"><a href="#8-第一个app安装" class="headerlink" title="8.第一个app安装"></a>8.第一个app安装</h5><p>cd android-studio/bin/<br>./studio.sh<br>安装 过程省略<br>等待同步</p><h5 id="9-安装platform-tools-启动第一个项目"><a href="#9-安装platform-tools-启动第一个项目" class="headerlink" title="9.安装platform-tools,启动第一个项目"></a>9.安装platform-tools,启动第一个项目</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#1.下载链接</span><br><span class="line">wget https:&#x2F;&#x2F;dl.google.com&#x2F;android&#x2F;repository&#x2F;platform-tools-latest-linux.zip</span><br><span class="line">#2. 解压</span><br><span class="line">7z x platform-tools-latest-linux.zip </span><br><span class="line">#3.设置环境变量</span><br><span class="line">nano ~&#x2F;.bashrc</span><br><span class="line">PATH&#x3D;$PATH:&#x2F;root&#x2F;platform-tools&#x2F;</span><br><span class="line">ctrl x 退出</span><br><span class="line">source ~&#x2F;.bashrc</span><br><span class="line">#4.连接手机</span><br><span class="line">adb connect 192.168.1.11:5555</span><br><span class="line">#5.查看状态</span><br><span class="line">adb devices</span><br><span class="line">#6.启动项目</span><br><span class="line">Android stduio启动项目 run</span><br><span class="line">就能看到连接手机 出现hello world！</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h5 id=&quot;1-下载安装kali&quot;&gt;&lt;a href=&quot;#1-下载安装kali&quot; class=&quot;headerlink&quot; title=&quot;1.下载安装kali&quot;&gt;&lt;/a&gt;1.下载安装kali&lt;/h5&gt;&lt;p&gt;账号 root 密码 root&lt;/p&gt;
+&lt;h5 id=&quot;2-修改时区&quot;&gt;&lt;a
+      
+    
+    </summary>
+    
+    
+      <category term="笔记" scheme="http://yoursite.com/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
+    
+  </entry>
   
   <entry>
     <title>adb笔记</title>
