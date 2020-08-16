@@ -21,6 +21,39 @@
       </tags>
   </entry>
   <entry>
+    <title>Mac-redis</title>
+    <url>/2020/08/16/Mac-redis/</url>
+    <content><![CDATA[<p>1.安装redis: brew install redis</p>
+<p>2.启动redis: redis-server</p>
+<p>3.测试Redis：起个新的端口 redis-cli</p>
+<p>4.Redis命令</p>
+<p>普通命令</p>
+<pre><code>查找键：keys [正则表达式]
+查看全部键：keys *
+判断键是否存在：exists key
+查看键对应的值的类型：type key
+删除键对应的值的类型：del key1 key2 key3...
+设置键的过期时间：expire key seconds
+查看键的有效时间：ttl key
+</code></pre><p>string</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.设置,替换 set name tom</span><br><span class="line">2.查看 get name</span><br><span class="line">3.批量设置 mset name1 tom name2 jan name3 tony</span><br><span class="line">4.批量查找 mget name1 name2 name3</span><br><span class="line">5.setex name 5 tom # 5s 后过期，等价于 set+expire</span><br><span class="line">6.setnx name tom # 如果name不存在就执行set创建,name已存在就不执行</span><br><span class="line">7.value是整数可以 incr age 5 #比如age原来是30，现在就是已经是35了</span><br><span class="line">8.追加值 append name 1</span><br></pre></td></tr></table></figure>
+<p>list</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.list左边插入数据 lpush books python java galang</span><br><span class="line">2.list右边插入数据 rpush books python java galang</span><br><span class="line">3.在指定元素前或后插入数据 linsert key before&#x2F;after 1 php</span><br><span class="line">4.查看长度 llen books</span><br><span class="line">5.队列(右边进左边出): lpop books</span><br><span class="line">6.栈(右边进右边出): rpop books</span><br><span class="line">7.查看全部 lrange books 0 -1</span><br><span class="line">8.索引查看 lindex books 1</span><br><span class="line">9.修改 lset books 1 rust</span><br><span class="line">10.切片,生成新的，多余去掉 ltrim books 1 -1 #区1到最后的值</span><br><span class="line">11.清空 ltrim books 1 0  # 这其实是清空了整个列表，因为区间范围长度为负</span><br><span class="line">12.删除 lrem key count value</span><br></pre></td></tr></table></figure>
+<p>hash</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.设置 hset books java &quot;think in java&quot;</span><br><span class="line">2.批量设置 hmset books name java price 23</span><br><span class="line">3.获取属性 hkeys books</span><br><span class="line">4.获取属性的值 hvals books</span><br><span class="line">5.查看全部 hgetall books</span><br><span class="line">6.查看长度 hlen books</span><br><span class="line">7.查看一个 hget books java</span><br><span class="line">8.操作数值 hincrby tom age 1 # tom 的年纪又老了一岁</span><br></pre></td></tr></table></figure>
+<p>set</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.设置 sadd books python</span><br><span class="line">2.查看 smembers books  # 注意顺序，和插入的并不一致，因为 set 是无序的</span><br><span class="line">3.查询某个value是否存在 sismember books java  # 又返回1，没有返回0</span><br><span class="line">4.查看长度 scard books</span><br><span class="line">5.弹出 spop books</span><br><span class="line">6.删除srem books python</span><br></pre></td></tr></table></figure>
+<p>zset(有序集合)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.设置 zadd books 9.0 &quot;python book&quot;</span><br><span class="line">2.按score顺序列出 zrange books 0 -1</span><br><span class="line">3.按score逆序列出 zrevrange books 0 -1</span><br><span class="line">4.查看长度 zcard books</span><br><span class="line">5.查看获取指定value的score zscore books &quot;python book&quot;</span><br><span class="line">6.根据分值区间遍历  zrangebyscore books 0 8.91 | zrangebyscore books 0 8.91 withscore</span><br><span class="line">7.删除value zrem books &quot;python book&quot;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>adb笔记</title>
     <url>/2020/08/16/adb/</url>
     <content><![CDATA[<h5 id="1、查询已连接设备-模拟器"><a href="#1、查询已连接设备-模拟器" class="headerlink" title="1、查询已连接设备/模拟器"></a>1、查询已连接设备/模拟器</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb devices</span><br></pre></td></tr></table></figure>
