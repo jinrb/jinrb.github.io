@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-16T15:00:55.174Z</updated>
+  <updated>2020-10-13T15:24:44.711Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>pyenv</title>
+    <link href="http://yoursite.com/2020/10/13/pyenv/"/>
+    <id>http://yoursite.com/2020/10/13/pyenv/</id>
+    <published>2020-10-13T15:23:02.000Z</published>
+    <updated>2020-10-13T15:24:44.711Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Kali-pyenv-安装与简单使用"><a href="#Kali-pyenv-安装与简单使用" class="headerlink" title="Kali pyenv 安装与简单使用"></a>Kali pyenv 安装与简单使用</h4><h5 id="下载地址"><a href="#下载地址" class="headerlink" title="下载地址"></a>下载地址</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;pyenv&#x2F;pyenv.git ~&#x2F;.pyenv</span><br></pre></td></tr></table></figure><h5 id="设置变量环境"><a href="#设置变量环境" class="headerlink" title="设置变量环境"></a>设置变量环境</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo &#39;export PYENV_ROOT&#x3D;&quot;$HOME&#x2F;.pyenv&quot;&#39; &gt;&gt; ~&#x2F;.bashrc</span><br><span class="line">echo &#39;export PATH&#x3D;&quot;$PYENV_ROOT&#x2F;bin:$PATH&quot;&#39; &gt;&gt; ~&#x2F;.bashrc</span><br><span class="line"></span><br><span class="line">echo -e &#39;if command -v pyenv 1&gt;&#x2F;dev&#x2F;null 2&gt;&amp;1; then\n  eval &quot;$(pyenv init -)&quot;\nfi&#39; &gt;&gt; ~&#x2F;.bashrc</span><br></pre></td></tr></table></figure><h5 id="配置Python前置条件"><a href="#配置Python前置条件" class="headerlink" title="配置Python前置条件"></a>配置Python前置条件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get install gcc-9-base libgcc-9-dev libc6-dev</span><br><span class="line"></span><br><span class="line">sudo apt-get update; sudo apt-get install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev</span><br></pre></td></tr></table></figure><h5 id="查看所有pyenv，python版本"><a href="#查看所有pyenv，python版本" class="headerlink" title="查看所有pyenv，python版本"></a>查看所有pyenv，python版本</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyenv versions</span><br></pre></td></tr></table></figure><h5 id="查看当前pyhton"><a href="#查看当前pyhton" class="headerlink" title="查看当前pyhton"></a>查看当前pyhton</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line">pyenv version</span><br></pre></td></tr></table></figure><h5 id="下载python"><a href="#下载python" class="headerlink" title="下载python"></a>下载python</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyenv install 3.7.5</span><br></pre></td></tr></table></figure><h5 id="切换python"><a href="#切换python" class="headerlink" title="切换python"></a>切换python</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyenv local 3.7.5</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;Kali-pyenv-安装与简单使用&quot;&gt;&lt;a href=&quot;#Kali-pyenv-安装与简单使用&quot; class=&quot;headerlink&quot; title=&quot;Kali pyenv 安装与简单使用&quot;&gt;&lt;/a&gt;Kali pyenv 安装与简单使用&lt;/h4&gt;&lt;h5 id=&quot;下
+      
+    
+    </summary>
+    
+    
+      <category term="笔记" scheme="http://yoursite.com/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+  </entry>
   
   <entry>
     <title>Mac-redis</title>
