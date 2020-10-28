@@ -192,6 +192,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/28/APK1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="JRB">
+      <meta itemprop="description" content="记录一些学习语言的笔记">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jinrongbin">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/28/APK1/" class="post-title-link" itemprop="url">APK去广告升级</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-28 23:20:41 / 修改时间：23:28:51" itemprop="dateCreated datePublished" datetime="2020-10-28T23:20:41+08:00">2020-10-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h5 id="jadx安装"><a href="#jadx安装" class="headerlink" title="jadx安装"></a>jadx安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">proxychains wget https:&#x2F;&#x2F;github.com&#x2F;skylot&#x2F;jadx&#x2F;releases&#x2F;download&#x2F;v1.1.0&#x2F;jadx-1.1.0.zip</span><br><span class="line">mkdir jadx</span><br><span class="line">mv jadx-1.1.0.zip jadx</span><br><span class="line">cd jadx&#x2F;</span><br><span class="line">7z x jadx-1.1.0.zip </span><br><span class="line">cd bin&#x2F;</span><br><span class="line">.&#x2F;jadx-gui</span><br></pre></td></tr></table></figure>
+<h5 id="去缓存"><a href="#去缓存" class="headerlink" title="去缓存"></a>去缓存</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;.cache&#x2F;vmware</span><br><span class="line">rm -rf *</span><br></pre></td></tr></table></figure>
+<h5 id="jeb安装"><a href="#jeb安装" class="headerlink" title="jeb安装"></a>jeb安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">7z x jeb-pro-3.19.1.202005071620_pwd_ilbtcdnwiuypbzeo_sn_#61641164873316763_.zip</span><br><span class="line">.&#x2F;jeb_linux.sh</span><br><span class="line">输入密码  ilbtcdnwiuypbzeo</span><br><span class="line">python jebKeygen.py （python2）</span><br><span class="line">JEB License Key: 1596996870285484043Z1660229094</span><br></pre></td></tr></table></figure>
+<h5 id="010安装"><a href="#010安装" class="headerlink" title="010安装"></a>010安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proxychains wget https:&#x2F;&#x2F;www.sweetscape.com&#x2F;download&#x2F;010EditorLinux64Installer.tar.gz</span><br><span class="line">tar zxvf 010EditorLinux64Installer.tar.gz</span><br><span class="line">.&#x2F;010EditorLinux64Installer</span><br></pre></td></tr></table></figure>
+<h5 id="软连接（注意是不是30-0-1可能不是）"><a href="#软连接（注意是不是30-0-1可能不是）" class="headerlink" title="软连接（注意是不是30.0.1可能不是）"></a>软连接（注意是不是30.0.1可能不是）</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ln -s &#x2F;root&#x2F;Desktop&#x2F;android-studio&#x2F;jre&#x2F;bin&#x2F;jarsigner &#x2F;usr&#x2F;bin</span><br><span class="line">ln -s &#x2F;root&#x2F;Android&#x2F;Sdk&#x2F;build-tools&#x2F;30.0.1&#x2F;aapt &#x2F;usr&#x2F;bin</span><br><span class="line">ln -s &#x2F;root&#x2F;Android&#x2F;Sdk&#x2F;build-tools&#x2F;30.0.1&#x2F;aapt2 &#x2F;usr&#x2F;bin</span><br></pre></td></tr></table></figure>
+<h5 id="安装-akptool"><a href="#安装-akptool" class="headerlink" title="安装 akptool"></a>安装 akptool</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mv apktool.txt apktool</span><br><span class="line">mv apktool* &#x2F;usr&#x2F;local&#x2F;bin&#x2F;</span><br><span class="line">chmod 777 apktool*</span><br></pre></td></tr></table></figure>
+<h4 id="去升级，重打包"><a href="#去升级，重打包" class="headerlink" title="去升级，重打包"></a>去升级，重打包</h4><h5 id="1-解包"><a href="#1-解包" class="headerlink" title="1.解包"></a>1.解包</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool d zhibo.apk</span><br></pre></td></tr></table></figure>
+<p>（查找过程省略，以后补修改smail）</p>
+<h5 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool b zhibo&#x2F;</span><br></pre></td></tr></table></figure>
+<h5 id="3-进入生成新apk的文件夹"><a href="#3-进入生成新apk的文件夹" class="headerlink" title="3.进入生成新apk的文件夹"></a>3.进入生成新apk的文件夹</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;dist</span><br></pre></td></tr></table></figure>
+<h5 id="4-生成签名"><a href="#4-生成签名" class="headerlink" title="4.生成签名"></a>4.生成签名</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -genkey -alias abc.keystore -keyalg RSA -validity 20000 -keystore abc.keystore</span><br></pre></td></tr></table></figure>
+<h5 id="5-给apk签名"><a href="#5-给apk签名" class="headerlink" title="5.给apk签名"></a>5.给apk签名</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jarsigner  -verbose -keystore abc.keystore -signedjar testx.apk zhibo.apk abc.keystore</span><br></pre></td></tr></table></figure>
+<h5 id="卸载原手机apk"><a href="#卸载原手机apk" class="headerlink" title="卸载原手机apk"></a>卸载原手机apk</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm uninstall com.hd.zhibo</span><br></pre></td></tr></table></figure>
+<h5 id="重新安装新apk"><a href="#重新安装新apk" class="headerlink" title="重新安装新apk"></a>重新安装新apk</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install testx.apk</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/13/pyenv/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -951,7 +1032,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
