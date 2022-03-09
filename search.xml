@@ -1,44 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>python rpc调用FRIDAdemo</title>
-    <url>/2020/12/07/1207/</url>
-    <content><![CDATA[<h5 id="js代码-s1-js"><a href="#js代码-s1-js" class="headerlink" title="js代码  s1.js"></a>js代码  s1.js</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function main()&#123;</span><br><span class="line">    Java.perform(function()&#123;</span><br><span class="line">        console.log(&quot;hello world!&quot;);</span><br><span class="line">        console.log(&quot;hello2!!!&quot;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setImmediate(main)</span><br></pre></td></tr></table></figure>
-<h5 id="python代码"><a href="#python代码" class="headerlink" title="python代码"></a>python代码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import time</span><br><span class="line">import frida</span><br><span class="line"></span><br><span class="line">device &#x3D; frida.get_device_manager().add_remote_device(&#39;192.168.1.125:8888&#39;)</span><br><span class="line"></span><br><span class="line">print(device.get_frontmost_application())</span><br><span class="line"></span><br><span class="line">pid &#x3D; device.get_frontmost_application().pid</span><br><span class="line">session &#x3D; device.attach(pid)</span><br><span class="line">#</span><br><span class="line">with open(&#39;s1.js&#39;) as f :</span><br><span class="line">    script &#x3D; session.create_script(f.read())</span><br><span class="line">    print(script)</span><br><span class="line">script.load()</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>APK去广告升级</title>
-    <url>/2020/10/28/APK1/</url>
-    <content><![CDATA[<h5 id="jadx安装"><a href="#jadx安装" class="headerlink" title="jadx安装"></a>jadx安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">proxychains wget https:&#x2F;&#x2F;github.com&#x2F;skylot&#x2F;jadx&#x2F;releases&#x2F;download&#x2F;v1.1.0&#x2F;jadx-1.1.0.zip</span><br><span class="line">mkdir jadx</span><br><span class="line">mv jadx-1.1.0.zip jadx</span><br><span class="line">cd jadx&#x2F;</span><br><span class="line">7z x jadx-1.1.0.zip </span><br><span class="line">cd bin&#x2F;</span><br><span class="line">.&#x2F;jadx-gui</span><br></pre></td></tr></table></figure>
-<h5 id="去缓存"><a href="#去缓存" class="headerlink" title="去缓存"></a>去缓存</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;.cache&#x2F;vmware</span><br><span class="line">rm -rf *</span><br></pre></td></tr></table></figure>
-<h5 id="jeb安装"><a href="#jeb安装" class="headerlink" title="jeb安装"></a>jeb安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7z x jeb-pro-3.19.1.202005071620_pwd_ilbtcdnwiuypbzeo_sn_#61641164873316763_.zip</span><br><span class="line">.&#x2F;jeb_linux.sh</span><br><span class="line">输入密码  ilbtcdnwiuypbzeo</span><br><span class="line">python jebKeygen.py （python2）</span><br><span class="line">JEB License Key: 1596996870285484043Z1660229094</span><br></pre></td></tr></table></figure>
-<h5 id="010安装"><a href="#010安装" class="headerlink" title="010安装"></a>010安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">proxychains wget https:&#x2F;&#x2F;www.sweetscape.com&#x2F;download&#x2F;010EditorLinux64Installer.tar.gz</span><br><span class="line">tar zxvf 010EditorLinux64Installer.tar.gz</span><br><span class="line">.&#x2F;010EditorLinux64Installer</span><br></pre></td></tr></table></figure>
-<h5 id="软连接（注意是不是30-0-1可能不是）"><a href="#软连接（注意是不是30-0-1可能不是）" class="headerlink" title="软连接（注意是不是30.0.1可能不是）"></a>软连接（注意是不是30.0.1可能不是）</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s &#x2F;root&#x2F;Desktop&#x2F;android-studio&#x2F;jre&#x2F;bin&#x2F;jarsigner &#x2F;usr&#x2F;bin</span><br><span class="line">ln -s &#x2F;root&#x2F;Android&#x2F;Sdk&#x2F;build-tools&#x2F;30.0.1&#x2F;aapt &#x2F;usr&#x2F;bin</span><br><span class="line">ln -s &#x2F;root&#x2F;Android&#x2F;Sdk&#x2F;build-tools&#x2F;30.0.1&#x2F;aapt2 &#x2F;usr&#x2F;bin</span><br></pre></td></tr></table></figure>
-<h5 id="安装-akptool"><a href="#安装-akptool" class="headerlink" title="安装 akptool"></a>安装 akptool</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mv apktool.txt apktool</span><br><span class="line">mv apktool* &#x2F;usr&#x2F;local&#x2F;bin&#x2F;</span><br><span class="line">chmod 777 apktool*</span><br></pre></td></tr></table></figure>
-<h4 id="去升级，重打包"><a href="#去升级，重打包" class="headerlink" title="去升级，重打包"></a>去升级，重打包</h4><h5 id="1-解包"><a href="#1-解包" class="headerlink" title="1.解包"></a>1.解包</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apktool d zhibo.apk</span><br></pre></td></tr></table></figure>
-<p>（查找过程省略，以后补修改smail）</p>
-<h5 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apktool b zhibo&#x2F;</span><br></pre></td></tr></table></figure>
-<h5 id="3-进入生成新apk的文件夹"><a href="#3-进入生成新apk的文件夹" class="headerlink" title="3.进入生成新apk的文件夹"></a>3.进入生成新apk的文件夹</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;dist</span><br></pre></td></tr></table></figure>
-<h5 id="4-生成签名"><a href="#4-生成签名" class="headerlink" title="4.生成签名"></a>4.生成签名</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">keytool -genkey -alias abc.keystore -keyalg RSA -validity 20000 -keystore abc.keystore</span><br></pre></td></tr></table></figure>
-<h5 id="5-给apk签名"><a href="#5-给apk签名" class="headerlink" title="5.给apk签名"></a>5.给apk签名</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jarsigner  -verbose -keystore abc.keystore -signedjar testx.apk zhibo.apk abc.keystore</span><br></pre></td></tr></table></figure>
-<h5 id="卸载原手机apk"><a href="#卸载原手机apk" class="headerlink" title="卸载原手机apk"></a>卸载原手机apk</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pm uninstall com.hd.zhibo</span><br></pre></td></tr></table></figure>
-<h5 id="重新安装新apk"><a href="#重新安装新apk" class="headerlink" title="重新安装新apk"></a>重新安装新apk</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb install testx.apk</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>Android</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>adb笔记</title>
     <url>/2020/08/16/adb/</url>
     <content><![CDATA[<h5 id="1、查询已连接设备-模拟器"><a href="#1、查询已连接设备-模拟器" class="headerlink" title="1、查询已连接设备/模拟器"></a>1、查询已连接设备/模拟器</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb devices</span><br></pre></td></tr></table></figure>
@@ -127,6 +89,31 @@
       </tags>
   </entry>
   <entry>
+    <title>APK去广告升级</title>
+    <url>/2020/10/28/APK1/</url>
+    <content><![CDATA[<h5 id="jadx安装"><a href="#jadx安装" class="headerlink" title="jadx安装"></a>jadx安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">proxychains wget https:&#x2F;&#x2F;github.com&#x2F;skylot&#x2F;jadx&#x2F;releases&#x2F;download&#x2F;v1.1.0&#x2F;jadx-1.1.0.zip</span><br><span class="line">mkdir jadx</span><br><span class="line">mv jadx-1.1.0.zip jadx</span><br><span class="line">cd jadx&#x2F;</span><br><span class="line">7z x jadx-1.1.0.zip </span><br><span class="line">cd bin&#x2F;</span><br><span class="line">.&#x2F;jadx-gui</span><br></pre></td></tr></table></figure>
+<h5 id="去缓存"><a href="#去缓存" class="headerlink" title="去缓存"></a>去缓存</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;root&#x2F;.cache&#x2F;vmware</span><br><span class="line">rm -rf *</span><br></pre></td></tr></table></figure>
+<h5 id="jeb安装"><a href="#jeb安装" class="headerlink" title="jeb安装"></a>jeb安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7z x jeb-pro-3.19.1.202005071620_pwd_ilbtcdnwiuypbzeo_sn_#61641164873316763_.zip</span><br><span class="line">.&#x2F;jeb_linux.sh</span><br><span class="line">输入密码  ilbtcdnwiuypbzeo</span><br><span class="line">python jebKeygen.py （python2）</span><br><span class="line">JEB License Key: 1596996870285484043Z1660229094</span><br></pre></td></tr></table></figure>
+<h5 id="010安装"><a href="#010安装" class="headerlink" title="010安装"></a>010安装</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">proxychains wget https:&#x2F;&#x2F;www.sweetscape.com&#x2F;download&#x2F;010EditorLinux64Installer.tar.gz</span><br><span class="line">tar zxvf 010EditorLinux64Installer.tar.gz</span><br><span class="line">.&#x2F;010EditorLinux64Installer</span><br></pre></td></tr></table></figure>
+<h5 id="软连接（注意是不是30-0-1可能不是）"><a href="#软连接（注意是不是30-0-1可能不是）" class="headerlink" title="软连接（注意是不是30.0.1可能不是）"></a>软连接（注意是不是30.0.1可能不是）</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ln -s &#x2F;root&#x2F;Desktop&#x2F;android-studio&#x2F;jre&#x2F;bin&#x2F;jarsigner &#x2F;usr&#x2F;bin</span><br><span class="line">ln -s &#x2F;root&#x2F;Android&#x2F;Sdk&#x2F;build-tools&#x2F;30.0.1&#x2F;aapt &#x2F;usr&#x2F;bin</span><br><span class="line">ln -s &#x2F;root&#x2F;Android&#x2F;Sdk&#x2F;build-tools&#x2F;30.0.1&#x2F;aapt2 &#x2F;usr&#x2F;bin</span><br></pre></td></tr></table></figure>
+<h5 id="安装-akptool"><a href="#安装-akptool" class="headerlink" title="安装 akptool"></a>安装 akptool</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mv apktool.txt apktool</span><br><span class="line">mv apktool* &#x2F;usr&#x2F;local&#x2F;bin&#x2F;</span><br><span class="line">chmod 777 apktool*</span><br></pre></td></tr></table></figure>
+<h4 id="去升级，重打包"><a href="#去升级，重打包" class="headerlink" title="去升级，重打包"></a>去升级，重打包</h4><h5 id="1-解包"><a href="#1-解包" class="headerlink" title="1.解包"></a>1.解包</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apktool d zhibo.apk</span><br></pre></td></tr></table></figure>
+<p>（查找过程省略，以后补修改smail）</p>
+<h5 id="2-打包"><a href="#2-打包" class="headerlink" title="2.打包"></a>2.打包</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apktool b zhibo&#x2F;</span><br></pre></td></tr></table></figure>
+<h5 id="3-进入生成新apk的文件夹"><a href="#3-进入生成新apk的文件夹" class="headerlink" title="3.进入生成新apk的文件夹"></a>3.进入生成新apk的文件夹</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;dist</span><br></pre></td></tr></table></figure>
+<h5 id="4-生成签名"><a href="#4-生成签名" class="headerlink" title="4.生成签名"></a>4.生成签名</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">keytool -genkey -alias abc.keystore -keyalg RSA -validity 20000 -keystore abc.keystore</span><br></pre></td></tr></table></figure>
+<h5 id="5-给apk签名"><a href="#5-给apk签名" class="headerlink" title="5.给apk签名"></a>5.给apk签名</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jarsigner  -verbose -keystore abc.keystore -signedjar testx.apk zhibo.apk abc.keystore</span><br></pre></td></tr></table></figure>
+<h5 id="卸载原手机apk"><a href="#卸载原手机apk" class="headerlink" title="卸载原手机apk"></a>卸载原手机apk</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pm uninstall com.hd.zhibo</span><br></pre></td></tr></table></figure>
+<h5 id="重新安装新apk"><a href="#重新安装新apk" class="headerlink" title="重新安装新apk"></a>重新安装新apk</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">adb install testx.apk</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git笔记</title>
     <url>/2020/05/03/git%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<p>1.执行初始化命令</p>
@@ -171,6 +158,19 @@
       </categories>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python rpc调用FRIDAdemo</title>
+    <url>/2020/12/07/1207/</url>
+    <content><![CDATA[<h5 id="js代码-s1-js"><a href="#js代码-s1-js" class="headerlink" title="js代码  s1.js"></a>js代码  s1.js</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">function main()&#123;</span><br><span class="line">    Java.perform(function()&#123;</span><br><span class="line">        console.log(&quot;hello world!&quot;);</span><br><span class="line">        console.log(&quot;hello2!!!&quot;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setImmediate(main)</span><br></pre></td></tr></table></figure>
+<h5 id="python代码"><a href="#python代码" class="headerlink" title="python代码"></a>python代码</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import time</span><br><span class="line">import frida</span><br><span class="line"></span><br><span class="line">device &#x3D; frida.get_device_manager().add_remote_device(&#39;192.168.1.125:8888&#39;)</span><br><span class="line"></span><br><span class="line">print(device.get_frontmost_application())</span><br><span class="line"></span><br><span class="line">pid &#x3D; device.get_frontmost_application().pid</span><br><span class="line">session &#x3D; device.attach(pid)</span><br><span class="line">#</span><br><span class="line">with open(&#39;s1.js&#39;) as f :</span><br><span class="line">    script &#x3D; session.create_script(f.read())</span><br><span class="line">    print(script)</span><br><span class="line">script.load()</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Android</tag>
       </tags>
   </entry>
   <entry>
