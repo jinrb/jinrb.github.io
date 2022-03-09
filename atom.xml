@@ -27,36 +27,8 @@
     
     <summary type="html">
     
-      
-      
-        &lt;h5 id=&quot;js代码-s1-js&quot;&gt;&lt;a href=&quot;#js代码-s1-js&quot; class=&quot;headerlink&quot; title=&quot;js代码  s1.js&quot;&gt;&lt;/a&gt;js代码  s1.js&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;
-      
-    
-    </summary>
-    
-    
-      <category term="笔记" scheme="http://yoursite.com/categories/%E7%AC%94%E8%AE%B0/"/>
-    
-    
-      <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>sailfish刷机</title>
-    <link href="http://yoursite.com/2020/12/03/%E5%88%B7%E6%9C%BA/"/>
-    <id>http://yoursite.com/2020/12/03/%E5%88%B7%E6%9C%BA/</id>
-    <published>2020-12-03T14:55:44.000Z</published>
-    <updated>2020-12-07T15:42:05.590Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida"><a href="#环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida" class="headerlink" title="环境： pixel+ andriod 8.1.0 + twrp3.3 + Magisk + Frida"></a>环境： pixel+ andriod 8.1.0 + twrp3.3 + Magisk + Frida</h4><h5 id="1-刷andriod-8-1-0-："><a href="#1-刷andriod-8-1-0-：" class="headerlink" title="1.刷andriod 8.1.0  ："></a>1.刷andriod 8.1.0  ：</h5><p>  系统镜像Factory Images for Nexus and Pixel Devices地址<br>  <a href="https://developers.google.com/android/images#sailfish" target="_blank" rel="noopener">https://developers.google.com/android/images#sailfish</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. wget https:&#x2F;&#x2F;dl.google.com&#x2F;dl&#x2F;android&#x2F;aosp&#x2F;sailfish-opm1.171019.011-factory-56d15350.zip</span><br><span class="line"></span><br><span class="line">2. 7z x  sailfish-opm1.171019.011-factory-56d15350.zip</span><br><span class="line"></span><br><span class="line">3. cd sailfish-opm1.171019.011-factory-56d15350</span><br><span class="line"></span><br><span class="line">4. .&#x2F;flash-all.sh（需按照fastboot）</span><br></pre></td></tr></table></figure></p><h5 id="2-刷twrp，Magisk"><a href="#2-刷twrp，Magisk" class="headerlink" title="2.刷twrp，Magisk"></a>2.刷twrp，Magisk</h5><p><a href="https://dl.twrp.me/sailfish/" target="_blank" rel="noopener">https://dl.twrp.me/sailfish/</a><br>将 twrp 安装到手机（Magisk 同理）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. adb push twrp-pixel-installer-sailfish-3.3.0-0.zip &#x2F;sdcard</span><br><span class="line"></span><br><span class="line">2.  将手机设置为fastboot模式，并且按动音量键切换至Recovery模式</span><br><span class="line"></span><br><span class="line">3.  fastboot boot twrp-3.3.0-0-sailfish.img</span><br><span class="line"></span><br><span class="line">4.  滑动下方的滑块，找到zip包，点击它（遇到坑，在sdcard下找不到zip包，重新push到&#x2F; 目录下）</span><br><span class="line"></span><br><span class="line">5.  点击Reboot System完成twrp的刷入</span><br></pre></td></tr></table></figure></p><h5 id="3-Frida-Server-的安装"><a href="#3-Frida-Server-的安装" class="headerlink" title="3.Frida-Server 的安装"></a>3.Frida-Server 的安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. adb push &#x2F;frida-server-12.8.0-android-arm64 &#x2F;data&#x2F;local&#x2F;tmp</span><br><span class="line">2. .&#x2F;frida-server-12.8.0-android-arm64</span><br></pre></td></tr></table></figure><p>百度网盘环境<br>链接：<a href="https://pan.baidu.com/s/1Jjm-u7kLUQsWqOgQkcvkYQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1Jjm-u7kLUQsWqOgQkcvkYQ</a><br>提取码：jl2f </p><h4 id="Android7-1-2-Supersu-Xposed"><a href="#Android7-1-2-Supersu-Xposed" class="headerlink" title="Android7.1.2 + Supersu + Xposed"></a>Android7.1.2 + Supersu + Xposed</h4><h5 id="1-刷机"><a href="#1-刷机" class="headerlink" title="1.刷机"></a>1.刷机</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;dl.google.com&#x2F;dl&#x2F;android&#x2F;aosp&#x2F;sailfish-n2g47o-factory-f2bc8024.zip</span><br><span class="line"></span><br><span class="line">7z x https:&#x2F;&#x2F;dl.google.com&#x2F;dl&#x2F;android&#x2F;aosp&#x2F;sailfish-n2g47o-factory-f2bc8024.zip</span><br><span class="line"></span><br><span class="line">cd sailfish-n2g47o</span><br><span class="line"></span><br><span class="line">.&#x2F;flash-all.sh</span><br></pre></td></tr></table></figure><h5 id="2-刷supersu"><a href="#2-刷supersu" class="headerlink" title="2.刷supersu"></a>2.刷supersu</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb push SR5-SuperSU-v2.82-SR5-20171001224502.zip &#x2F;sdcard&#x2F;</span><br><span class="line">adb reboot bootloader</span><br><span class="line">fastboot boot twrp-3.3.0-0-sailfish.img</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida&quot;&gt;&lt;a href=&quot;#环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida&quot; class=&quot;headerlink&quot; title=&quot;环境： 
-      
+      &lt;h5 id=&quot;js代码-s1-js&quot;&gt;&lt;a href=&quot;#js代码-s1-js&quot; class=&quot;headerlink&quot; title=&quot;js代码  s1.js&quot;&gt;&lt;/a&gt;js代码  s1.js&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;function main()&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    Java.perform(function()&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        console.log(&amp;quot;hello world!&amp;quot;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        console.log(&amp;quot;hello2!!!&amp;quot;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;setImmediate(main)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h5 id=&quot;python代码&quot;&gt;&lt;a href=&quot;#python代码&quot; class=&quot;headerlink&quot; title=&quot;python代码&quot;&gt;&lt;/a&gt;python代码&lt;/h5&gt;
     
     </summary>
     
@@ -79,16 +51,37 @@
     
     <summary type="html">
     
-      
-      
-        &lt;h5 id=&quot;1-服务器-docker安装&quot;&gt;&lt;a href=&quot;#1-服务器-docker安装&quot; class=&quot;headerlink&quot; title=&quot;1.服务器 docker安装&quot;&gt;&lt;/a&gt;1.服务器 docker安装&lt;/h5&gt;&lt;figure class=&quot;highlight 
-      
+      &lt;h5 id=&quot;1-服务器-docker安装&quot;&gt;&lt;a href=&quot;#1-服务器-docker安装&quot; class=&quot;headerlink&quot; title=&quot;1.服务器 docker安装&quot;&gt;&lt;/a&gt;1.服务器 docker安装&lt;/h5&gt;&lt;figure class=&quot;highlight shell&quot;&gt;&lt;figcaption&gt;&lt;span&gt;script&lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;yum -y install yum-utils&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum list docker-ce&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yum install docker-ce&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;systemctl start docker&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h5 id=&quot;2-服务器svn安装&quot;&gt;&lt;a href=&quot;#2-服务器svn安装&quot; class=&quot;headerlink&quot; title=&quot;2.服务器svn安装&quot;&gt;&lt;/a&gt;2.服务器svn安装&lt;/h5&gt;
     
     </summary>
     
     
     
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>sailfish刷机</title>
+    <link href="http://yoursite.com/2020/12/03/%E5%88%B7%E6%9C%BA/"/>
+    <id>http://yoursite.com/2020/12/03/%E5%88%B7%E6%9C%BA/</id>
+    <published>2020-12-03T14:55:44.000Z</published>
+    <updated>2020-12-07T15:42:05.590Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida"><a href="#环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida" class="headerlink" title="环境： pixel+ andriod 8.1.0 + twrp3.3 + Magisk + Frida"></a>环境： pixel+ andriod 8.1.0 + twrp3.3 + Magisk + Frida</h4><h5 id="1-刷andriod-8-1-0-："><a href="#1-刷andriod-8-1-0-：" class="headerlink" title="1.刷andriod 8.1.0  ："></a>1.刷andriod 8.1.0  ：</h5><p>  系统镜像Factory Images for Nexus and Pixel Devices地址<br>  <a href="https://developers.google.com/android/images#sailfish" target="_blank" rel="noopener">https://developers.google.com/android/images#sailfish</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. wget https:&#x2F;&#x2F;dl.google.com&#x2F;dl&#x2F;android&#x2F;aosp&#x2F;sailfish-opm1.171019.011-factory-56d15350.zip</span><br><span class="line"></span><br><span class="line">2. 7z x  sailfish-opm1.171019.011-factory-56d15350.zip</span><br><span class="line"></span><br><span class="line">3. cd sailfish-opm1.171019.011-factory-56d15350</span><br><span class="line"></span><br><span class="line">4. .&#x2F;flash-all.sh（需按照fastboot）</span><br></pre></td></tr></table></figure></p><h5 id="2-刷twrp，Magisk"><a href="#2-刷twrp，Magisk" class="headerlink" title="2.刷twrp，Magisk"></a>2.刷twrp，Magisk</h5><p><a href="https://dl.twrp.me/sailfish/" target="_blank" rel="noopener">https://dl.twrp.me/sailfish/</a><br>将 twrp 安装到手机（Magisk 同理）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. adb push twrp-pixel-installer-sailfish-3.3.0-0.zip &#x2F;sdcard</span><br><span class="line"></span><br><span class="line">2.  将手机设置为fastboot模式，并且按动音量键切换至Recovery模式</span><br><span class="line"></span><br><span class="line">3.  fastboot boot twrp-3.3.0-0-sailfish.img</span><br><span class="line"></span><br><span class="line">4.  滑动下方的滑块，找到zip包，点击它（遇到坑，在sdcard下找不到zip包，重新push到&#x2F; 目录下）</span><br><span class="line"></span><br><span class="line">5.  点击Reboot System完成twrp的刷入</span><br></pre></td></tr></table></figure></p><h5 id="3-Frida-Server-的安装"><a href="#3-Frida-Server-的安装" class="headerlink" title="3.Frida-Server 的安装"></a>3.Frida-Server 的安装</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. adb push &#x2F;frida-server-12.8.0-android-arm64 &#x2F;data&#x2F;local&#x2F;tmp</span><br><span class="line">2. .&#x2F;frida-server-12.8.0-android-arm64</span><br></pre></td></tr></table></figure><p>百度网盘环境<br>链接：<a href="https://pan.baidu.com/s/1Jjm-u7kLUQsWqOgQkcvkYQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1Jjm-u7kLUQsWqOgQkcvkYQ</a><br>提取码：jl2f </p><h4 id="Android7-1-2-Supersu-Xposed"><a href="#Android7-1-2-Supersu-Xposed" class="headerlink" title="Android7.1.2 + Supersu + Xposed"></a>Android7.1.2 + Supersu + Xposed</h4><h5 id="1-刷机"><a href="#1-刷机" class="headerlink" title="1.刷机"></a>1.刷机</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;dl.google.com&#x2F;dl&#x2F;android&#x2F;aosp&#x2F;sailfish-n2g47o-factory-f2bc8024.zip</span><br><span class="line"></span><br><span class="line">7z x https:&#x2F;&#x2F;dl.google.com&#x2F;dl&#x2F;android&#x2F;aosp&#x2F;sailfish-n2g47o-factory-f2bc8024.zip</span><br><span class="line"></span><br><span class="line">cd sailfish-n2g47o</span><br><span class="line"></span><br><span class="line">.&#x2F;flash-all.sh</span><br></pre></td></tr></table></figure><h5 id="2-刷supersu"><a href="#2-刷supersu" class="headerlink" title="2.刷supersu"></a>2.刷supersu</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb push SR5-SuperSU-v2.82-SR5-20171001224502.zip &#x2F;sdcard&#x2F;</span><br><span class="line">adb reboot bootloader</span><br><span class="line">fastboot boot twrp-3.3.0-0-sailfish.img</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida&quot;&gt;&lt;a href=&quot;#环境：-pixel-andriod-8-1-0-twrp3-3-Magisk-Frida&quot; class=&quot;headerlink&quot; title=&quot;环境： pixel+ andriod 8.1.0 + twrp3.3 + Magisk + Frida&quot;&gt;&lt;/a&gt;环境： pixel+ andriod 8.1.0 + twrp3.3 + Magisk + Frida&lt;/h4&gt;&lt;h5 id=&quot;1-刷andriod-8-1-0-：&quot;&gt;&lt;a href=&quot;#1-刷andriod-8-1-0-：&quot; class=&quot;headerlink&quot; title=&quot;1.刷andriod 8.1.0  ：&quot;&gt;&lt;/a&gt;1.刷andriod 8.1.0  ：&lt;/h5&gt;&lt;p&gt;  系统镜像Factory Images for Nexus and Pixel Devices地址&lt;br&gt;  &lt;a href=&quot;https://developers.google.com/android/images#sailfish&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://developers.google.com/android/images#sailfish&lt;/a&gt;&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="笔记" scheme="http://yoursite.com/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="Android" scheme="http://yoursite.com/tags/Android/"/>
     
   </entry>
   
@@ -103,10 +96,8 @@
     
     <summary type="html">
     
-      
-      
-        &lt;h5 id=&quot;jadx安装&quot;&gt;&lt;a href=&quot;#jadx安装&quot; class=&quot;headerlink&quot; title=&quot;jadx安装&quot;&gt;&lt;/a&gt;jadx安装&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gut
-      
+      &lt;h5 id=&quot;jadx安装&quot;&gt;&lt;a href=&quot;#jadx安装&quot; class=&quot;headerlink&quot; title=&quot;jadx安装&quot;&gt;&lt;/a&gt;jadx安装&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;proxychains wget https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;skylot&amp;#x2F;jadx&amp;#x2F;releases&amp;#x2F;download&amp;#x2F;v1.1.0&amp;#x2F;jadx-1.1.0.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mkdir jadx&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mv jadx-1.1.0.zip jadx&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cd jadx&amp;#x2F;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7z x jadx-1.1.0.zip &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cd bin&amp;#x2F;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;.&amp;#x2F;jadx-gui&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h5 id=&quot;去缓存&quot;&gt;&lt;a href=&quot;#去缓存&quot; class=&quot;headerlink&quot; title=&quot;去缓存&quot;&gt;&lt;/a&gt;去缓存&lt;/h5&gt;
     
     </summary>
     
@@ -129,10 +120,8 @@
     
     <summary type="html">
     
-      
-      
-        &lt;h4 id=&quot;kali环境配置&quot;&gt;&lt;a href=&quot;#kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;kali环境配置&quot;&gt;&lt;/a&gt;kali环境配置&lt;/h4&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a href=&quot;https://pan.baidu
-      
+      &lt;h4 id=&quot;kali环境配置&quot;&gt;&lt;a href=&quot;#kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;kali环境配置&quot;&gt;&lt;/a&gt;kali环境配置&lt;/h4&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a href=&quot;https://pan.baidu.com/s/1dPIe5FzZLQzSLMsMcGZUrg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;百度云盘&lt;/a&gt;  提取码：50jw &lt;/p&gt;
+&lt;h5 id=&quot;1-切换root登录&quot;&gt;&lt;a href=&quot;#1-切换root登录&quot; class=&quot;headerlink&quot; title=&quot;1.切换root登录&quot;&gt;&lt;/a&gt;1.切换root登录&lt;/h5&gt;
     
     </summary>
     
@@ -155,15 +144,9 @@
     
     <summary type="html">
     
-      
-      
-        &lt;p&gt;1.安装redis: brew install redis&lt;/p&gt;
+      &lt;p&gt;1.安装redis: brew install redis&lt;/p&gt;
 &lt;p&gt;2.启动redis: redis-server&lt;/p&gt;
 &lt;p&gt;3.测试Redis：起个新的端口 redis-cli&lt;/p&gt;
-&lt;p&gt;4.Redis命令&lt;/p&gt;
-&lt;p&gt;普通命令&lt;/p&gt;
-&lt;pre&gt;&lt;cod
-      
     
     </summary>
     
@@ -186,10 +169,8 @@
     
     <summary type="html">
     
-      
-      
-        &lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class=&quot;headerlink&quot; title=&quot;1、查询已连接设备/模拟器&quot;&gt;&lt;/a&gt;1、查询已连接设备/模拟器&lt;/h5&gt;&lt;figure class=&quot;highlight plai
-      
+      &lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class=&quot;headerlink&quot; title=&quot;1、查询已连接设备/模拟器&quot;&gt;&lt;/a&gt;1、查询已连接设备/模拟器&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb devices&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h5 id=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;a href=&quot;#2、指定设备获取屏幕分辨率&quot; class=&quot;headerlink&quot; title=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;/a&gt;2、指定设备获取屏幕分辨率&lt;/h5&gt;
     
     </summary>
     
@@ -212,11 +193,9 @@
     
     <summary type="html">
     
-      
-      
-        &lt;p&gt;1.执行初始化命令&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;cod
-      
+      &lt;p&gt;1.执行初始化命令&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;git init&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;2.管理目录下文件的状态 (注意：新增或者修改的文件会变红)&lt;/p&gt;
     
     </summary>
     
