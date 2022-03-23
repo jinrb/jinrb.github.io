@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="objection12Frida只是提供了各种API供我们调用，在此基础之上可以实现具体的功能，比如禁用证书绑定之类的脚本，就是使用Frida的各种API来组合编写而成。于是有大佬将各种常见、常用的功能整合进一个工具，供我们直接在命令行中使用，这个工具便是objection。objection功能强大，命令众多，而且不用写一行代码，便可实现诸如内存搜索、类和模块搜索、方法hook打印参数返回值调用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="objection 的基本使用">
+<meta property="og:url" content="http://yoursite.com/2022/03/23/objection/index.html">
+<meta property="og:site_name" content="凡人逆向">
+<meta property="og:description" content="objection12Frida只是提供了各种API供我们调用，在此基础之上可以实现具体的功能，比如禁用证书绑定之类的脚本，就是使用Frida的各种API来组合编写而成。于是有大佬将各种常见、常用的功能整合进一个工具，供我们直接在命令行中使用，这个工具便是objection。objection功能强大，命令众多，而且不用写一行代码，便可实现诸如内存搜索、类和模块搜索、方法hook打印参数返回值调用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/frida01.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion02.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion01.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion03.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion04.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion05.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion06.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion07.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion08.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion09.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion12.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion10.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion11.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion13.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion14.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/objecion15.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs1.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs2.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs4.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs3.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs5.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs6.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs7.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs8.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs9.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/23/objection/txs10.png">
+<meta property="article:published_time" content="2022-03-23T14:08:02.000Z">
+<meta property="article:modified_time" content="2022-03-23T15:25:34.075Z">
+<meta property="article:author" content="恰米">
+<meta property="article:tag" content="objection">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2022/03/23/objection/frida01.png">
+
+<link rel="canonical" href="http://yoursite.com/2022/03/23/objection/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>objection 的基本使用 | 凡人逆向</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="凡人逆向" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">凡人逆向</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一切都是命运石之门的选择</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/jinrb" class="github-corner" title="JRB GitHub" aria-label="JRB GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/03/23/objection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="恰米">
+      <meta itemprop="description" content="一个懒惰凡人的blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凡人逆向">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          objection 的基本使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-03-23 22:08:02 / 修改时间：23:25:34" itemprop="dateCreated datePublished" datetime="2022-03-23T22:08:02+08:00">2022-03-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="objection"><a href="#objection" class="headerlink" title="objection"></a>objection</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Frida只是提供了各种API供我们调用，在此基础之上可以实现具体的功能，比如禁用证书绑定之类的脚本，就是使用Frida的各种API来组合编写而成。于是有大佬将各种常见、常用的功能整合进一个工具，供我们直接在命令行中使用，这个工具便是objection。</span><br><span class="line">objection功能强大，命令众多，而且不用写一行代码，便可实现诸如内存搜索、类和模块搜索、方法hook打印参数返回值调用栈等常用功能，是一个非常方便的，逆向必备、内存漫游神器</span><br></pre></td></tr></table></figure>
+<h4 id="1-开启非标准端口frida"><a href="#1-开启非标准端口frida" class="headerlink" title="1.开启非标准端口frida"></a>1.开启非标准端口frida</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;fs -l 0.0.0.0:8888</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/frida01.png" alt="frida特殊端口"></p>
+<h4 id="2-查看objection日志"><a href="#2-查看objection日志" class="headerlink" title="2.查看objection日志"></a>2.查看objection日志</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat .objection&#x2F;objection.log  |grep -i frida</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion02.png" alt="查看objection日志"></p>
+<h4 id="3-连接objecion"><a href="#3-连接objecion" class="headerlink" title="3.连接objecion"></a>3.连接objecion</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">objection 和frida 对应版本 需要 看时间</span><br><span class="line">https:&#x2F;&#x2F;github.com&#x2F;frida&#x2F;frida&#x2F;releases</span><br><span class="line">https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;objection&#x2F;#history</span><br><span class="line"></span><br><span class="line">#正常连接  objection -g com.android.settings explore</span><br><span class="line">#非正常端口连接   objection -N -h 192.168.2.57 -p 8888 -g com.android.settings explore</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion01.png" alt="非正常端口连接"></p>
+<h4 id="4-查看内存中加载的库"><a href="#4-查看内存中加载的库" class="headerlink" title="4.查看内存中加载的库"></a>4.查看内存中加载的库</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">memory list modules</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion03.png" alt="查看内存中加载的库"></p>
+<h4 id="5-查看库的导出函数"><a href="#5-查看库的导出函数" class="headerlink" title="5.查看库的导出函数"></a>5.查看库的导出函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">正常查看  memory list exports libssl.so</span><br><span class="line">文件导出  memory list exports libart.so --json &#x2F;root&#x2F;libart.json</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion04.png" alt="查看库的导出函数"></p>
+<h4 id="6-在内存堆上搜索实例"><a href="#6-在内存堆上搜索实例" class="headerlink" title="6.在内存堆上搜索实例"></a>6.在内存堆上搜索实例</h4><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android heap search instances com.android.settings.DisplaySettings  --fresh</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion05.png" alt="在内存堆上搜索实例"></p>
+<h4 id="7-调用实例的方法"><a href="#7-调用实例的方法" class="headerlink" title="7.调用实例的方法"></a>7.调用实例的方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android heap execute 0x23ba  getPreferenceScreenResId</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion06.png" alt="调用实例的方法"></p>
+<h4 id="8-直接启动activity-直接进入该页面"><a href="#8-直接启动activity-直接进入该页面" class="headerlink" title="8.直接启动activity,直接进入该页面"></a>8.直接启动activity,直接进入该页面</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android intent launch_activity com.android.settings.DisplaySettings</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion07.png" alt="直接启动activity"></p>
+<h4 id="9-查看当前可用的activity"><a href="#9-查看当前可用的activity" class="headerlink" title="9.查看当前可用的activity"></a>9.查看当前可用的activity</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android hooking list activities</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion08.png" alt="查看当前可用的activity"></p>
+<h4 id="10-列出内存中所有的类"><a href="#10-列出内存中所有的类" class="headerlink" title="10.列出内存中所有的类"></a>10.列出内存中所有的类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android hooking list classes</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion09.png" alt="列出内存中所有的类"></p>
+<h4 id="11-列出类的所有方法"><a href="#11-列出类的所有方法" class="headerlink" title="11.列出类的所有方法"></a>11.列出类的所有方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android hooking list class_methods  com.android.settings.DisplaySettings</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion12.png" alt="列出类的所有方法"></p>
+<h4 id="12-内存中搜索关键词所有的类"><a href="#12-内存中搜索关键词所有的类" class="headerlink" title="12.内存中搜索关键词所有的类"></a>12.内存中搜索关键词所有的类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android hooking search classes display</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion10.png" alt="列出内存中所有的类"></p>
+<h4 id="13-内存中搜索所有的方法"><a href="#13-内存中搜索所有的方法" class="headerlink" title="13.内存中搜索所有的方法"></a>13.内存中搜索所有的方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android hooking search methods display</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion11.png" alt="内存中搜索所有的方法"></p>
+<h4 id="14-hook类的所有方法"><a href="#14-hook类的所有方法" class="headerlink" title="14.hook类的所有方法"></a>14.hook类的所有方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android hooking watch class android.bluetooth.BluetoothDevice</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion13.png" alt="hook方法的参数、返回值和调用栈"></p>
+<h4 id="15-hook方法的参数、返回值和调用栈"><a href="#15-hook方法的参数、返回值和调用栈" class="headerlink" title="15.hook方法的参数、返回值和调用栈"></a>15.hook方法的参数、返回值和调用栈</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">android hooking watch class_method android.bluetooth.BluetoothDevice.equals --dump-args --dump-backtrace --dump-return</span><br><span class="line">android hooking watch class_method java.io.File.$init --dump-args</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion14.png" alt="hook方法的参数、返回值和调用栈"></p>
+<h4 id="17-插件-Wallbreaker"><a href="#17-插件-Wallbreaker" class="headerlink" title="17.插件 Wallbreaker"></a>17.插件 <a href="https://github.com/hluwa/Wallbreaker" target="_blank" rel="noopener">Wallbreaker</a></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">下载 git clone https:&#x2F;&#x2F;github.com&#x2F;hluwa&#x2F;Wallbreaker.git</span><br></pre></td></tr></table></figure>
+<h5 id="加载Wallbreaker"><a href="#加载Wallbreaker" class="headerlink" title="加载Wallbreaker"></a>加载Wallbreaker</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plugin load &#x2F;root&#x2F;Desktop&#x2F;Wallbreaker</span><br></pre></td></tr></table></figure>
+<h5 id="wallbreaker-查看类"><a href="#wallbreaker-查看类" class="headerlink" title="wallbreaker 查看类"></a>wallbreaker 查看类</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plugin wallbreaker classdump --fullname android.bluetooth.BluetoothDevice</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/objecion15.png" alt="wallbreaker 查看类"></p>
+<h3 id="实战-腾讯app漏洞第三题"><a href="#实战-腾讯app漏洞第三题" class="headerlink" title="实战: 腾讯app漏洞第三题"></a>实战: 腾讯app漏洞第三题</h3><h4 id="解压ab文件"><a href="#解压ab文件" class="headerlink" title="解压ab文件"></a>解压ab文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">java -jar ade.jar unpack 1.ab 1.tar </span><br><span class="line">tar xvf 1.tar</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/txs1.png" alt="解压ab文件"></p>
+<h4 id="夜神模拟器上-安装-frida-server-x86"><a href="#夜神模拟器上-安装-frida-server-x86" class="headerlink" title="夜神模拟器上 安装 frida-server-x86"></a>夜神模拟器上 安装 frida-server-x86</h4><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">adb push frida-server-12.8.0-android-x86 /data/local/tmp   </span><br><span class="line">adb shell</span><br><span class="line">cd /data/local/tmp</span><br><span class="line">chmod 777 *</span><br><span class="line">./frida-server-12.8.0-android-x86</span><br></pre></td></tr></table></figure>
+<h4 id="打开jadx-静态分析"><a href="#打开jadx-静态分析" class="headerlink" title="打开jadx 静态分析"></a>打开jadx 静态分析</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在MainActivity onCreate 调用a方法  a方法总写数据库方法 getWritableDatabase</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/txs2.png" alt="静态分析"><br><img src="/2022/03/23/objection/txs4.png" alt="静态分析"></p>
+<h4 id="在-AndroidManifest-xml-查看包名"><a href="#在-AndroidManifest-xml-查看包名" class="headerlink" title="在 AndroidManifest.xml 查看包名"></a>在 AndroidManifest.xml 查看包名</h4><p><img src="/2022/03/23/objection/txs3.png" alt="静态分析"></p>
+<h4 id="objection-分析"><a href="#objection-分析" class="headerlink" title="objection 分析"></a>objection 分析</h4><p>打开objection<br><figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objection -g com.example.yaphetshan.tencentwelcome explore</span><br></pre></td></tr></table></figure></p>
+<p>静态查看 net.sqlcipher.database.SQLiteOpenHelper类下的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android hooking list class_methods net.sqlcipher.database.SQLiteOpenHelper</span><br></pre></td></tr></table></figure><br><img src="/2022/03/23/objection/txs5.png" alt="静态查看"></p>
+<p>动态查看 net.sqlcipher.database.SQLiteOpenHelper类下的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plugin load &#x2F;root&#x2F;Desktop&#x2F;Wallbreaker</span><br><span class="line">plugin wallbreaker classdump --fullname net.sqlcipher.database.SQLiteOpenHelper</span><br></pre></td></tr></table></figure><br><img src="/2022/03/23/objection/txs6.png" alt="动态查看"></p>
+<ol>
+<li>hook net.sqlcipher.database.SQLiteOpenHelper.getWritableDatabase</li>
+<li>寻找MainActivity的实例</li>
+<li>主动调用MainActivity的实例的a方法<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">android hooking watch class_method net.sqlcipher.database.SQLiteOpenHelper.getWritableDatabase --dump-args --dump-backtrace --dump-return </span><br><span class="line">android heap search instances com.example.yaphetshan.tencentwelcome.MainActivity</span><br><span class="line">android heap execute 0x100bda a</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="/2022/03/23/objection/txs7.png" alt="主动调用"></p>
+<p>DB Browser for SQLite 打开数据库 输入密码 ae56f99</p>
+<p><img src="/2022/03/23/objection/txs8.png" alt="打开数据库"><br><img src="/2022/03/23/objection/txs9.png" alt="flag结果"></p>
+<hr>
+<h5 id="frida-hook"><a href="#frida-hook" class="headerlink" title="frida hook"></a>frida hook</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    Java.perform(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// hook 重载 </span></span><br><span class="line">        Java.use(<span class="string">"net.sqlcipher.database.SQLiteOpenHelper"</span>).getWritableDatabase.overload(<span class="string">'java.lang.String'</span>).implementation = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">var</span> result = <span class="keyword">this</span>.getWritableDatabase(x);</span><br><span class="line">            <span class="comment">// 调用栈</span></span><br><span class="line">            <span class="built_in">console</span>.log(Java.use(<span class="string">"android.util.Log"</span>).getStackTraceString(Java.use(<span class="string">"java.lang.Throwable"</span>).$<span class="keyword">new</span>()));</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">"xString,result"</span>,x,result);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;;</span><br><span class="line">        Java.use(<span class="string">"net.sqlcipher.database.SQLiteOpenHelper"</span>).getWritableDatabase.overload(<span class="string">'[C'</span>).implementation = <span class="function"><span class="keyword">function</span> (<span class="params">x</span>)</span>&#123;</span><br><span class="line">         <span class="keyword">var</span> result = <span class="keyword">this</span>.getWritableDatabase(x);</span><br><span class="line">         <span class="built_in">console</span>.log(<span class="string">"xCharSe,result"</span>,x,result);</span><br><span class="line">         <span class="keyword">return</span> result;</span><br><span class="line">     &#125;</span><br><span class="line">    &#125;)      </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">invoke</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// 调用实例，主动调用方法</span></span><br><span class="line">    Java.perform(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        Java.choose(<span class="string">"com.example.yaphetshan.tencentwelcome.MainActivity"</span>,&#123;</span><br><span class="line">            onMatch:<span class="function"><span class="keyword">function</span>(<span class="params">instance</span>)</span>&#123;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">"found insttance "</span>,instance);</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">"invoke instance.a "</span>,instance.a());</span><br><span class="line">            &#125;,<span class="attr">onComplete</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">"search completed !"</span>)&#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">setImmediate(main)</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/03/23/objection/txs10.png" alt="frida hook"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/objection/" rel="tag"># objection</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/23/frida_hook_java/" rel="prev" title="frida hook java 基础六层锁机">
+      <i class="fa fa-chevron-left"></i> frida hook java 基础六层锁机
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#objection"><span class="nav-number">1.</span> <span class="nav-text">objection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-开启非标准端口frida"><span class="nav-number">1.1.</span> <span class="nav-text">1.开启非标准端口frida</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-查看objection日志"><span class="nav-number">1.2.</span> <span class="nav-text">2.查看objection日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-连接objecion"><span class="nav-number">1.3.</span> <span class="nav-text">3.连接objecion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-查看内存中加载的库"><span class="nav-number">1.4.</span> <span class="nav-text">4.查看内存中加载的库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-查看库的导出函数"><span class="nav-number">1.5.</span> <span class="nav-text">5.查看库的导出函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-在内存堆上搜索实例"><span class="nav-number">1.6.</span> <span class="nav-text">6.在内存堆上搜索实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-调用实例的方法"><span class="nav-number">1.7.</span> <span class="nav-text">7.调用实例的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-直接启动activity-直接进入该页面"><span class="nav-number">1.8.</span> <span class="nav-text">8.直接启动activity,直接进入该页面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-查看当前可用的activity"><span class="nav-number">1.9.</span> <span class="nav-text">9.查看当前可用的activity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-列出内存中所有的类"><span class="nav-number">1.10.</span> <span class="nav-text">10.列出内存中所有的类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-列出类的所有方法"><span class="nav-number">1.11.</span> <span class="nav-text">11.列出类的所有方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-内存中搜索关键词所有的类"><span class="nav-number">1.12.</span> <span class="nav-text">12.内存中搜索关键词所有的类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-内存中搜索所有的方法"><span class="nav-number">1.13.</span> <span class="nav-text">13.内存中搜索所有的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-hook类的所有方法"><span class="nav-number">1.14.</span> <span class="nav-text">14.hook类的所有方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-hook方法的参数、返回值和调用栈"><span class="nav-number">1.15.</span> <span class="nav-text">15.hook方法的参数、返回值和调用栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-插件-Wallbreaker"><span class="nav-number">1.16.</span> <span class="nav-text">17.插件 Wallbreaker</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#加载Wallbreaker"><span class="nav-number">1.16.1.</span> <span class="nav-text">加载Wallbreaker</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#wallbreaker-查看类"><span class="nav-number">1.16.2.</span> <span class="nav-text">wallbreaker 查看类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实战-腾讯app漏洞第三题"><span class="nav-number">2.</span> <span class="nav-text">实战: 腾讯app漏洞第三题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解压ab文件"><span class="nav-number">2.1.</span> <span class="nav-text">解压ab文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#夜神模拟器上-安装-frida-server-x86"><span class="nav-number">2.2.</span> <span class="nav-text">夜神模拟器上 安装 frida-server-x86</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#打开jadx-静态分析"><span class="nav-number">2.3.</span> <span class="nav-text">打开jadx 静态分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在-AndroidManifest-xml-查看包名"><span class="nav-number">2.4.</span> <span class="nav-text">在 AndroidManifest.xml 查看包名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#objection-分析"><span class="nav-number">2.5.</span> <span class="nav-text">objection 分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#frida-hook"><span class="nav-number">2.5.1.</span> <span class="nav-text">frida hook</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="恰米"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">恰米</p>
+  <div class="site-description" itemprop="description">一个懒惰凡人的blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">恰米</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '731e8bc7f3f07273d605',
+      clientSecret: 'd5d63de17776046bc789e3edc66932a6bbc89424',
+      repo        : 'https://jinrb.github.io/index.html',
+      owner       : 'JinRongbin',
+      admin       : ['germey'],
+      id          : 'cfcd3f90842d18a71e975e05fb9345a3',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+    </div>
+</body>
+</html>
