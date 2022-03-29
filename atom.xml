@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2022-03-27T13:36:00.000Z</updated>
+  <updated>2022-03-29T15:28:44.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android逆向之某狗signature</title>
+    <link href="http://yoursite.com/2022/03/29/kugou/"/>
+    <id>http://yoursite.com/2022/03/29/kugou/</id>
+    <published>2022-03-29T14:08:02.000Z</published>
+    <updated>2022-03-29T15:28:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Android逆向之某狗signature"><a href="#Android逆向之某狗signature" class="headerlink" title="Android逆向之某狗signature"></a>Android逆向之某狗signature</h3><h4 id="抓包-charles-vpn"><a href="#抓包-charles-vpn" class="headerlink" title="抓包 charles + vpn"></a>抓包 charles + vpn</h4><p>app version 11.1.4</p><p>今天我们分析一个简单的app的signature,首先先抓包</p><p><img src="/2022/03/29/kugou/1.png" alt="抓包"></p><p>利用反编译工具，搜索”signature”</p><p><img src="/2022/03/29/kugou/2.png" alt="jadx"></p><p>经过跟踪定位,我们猜测com.kugou.common.utils.ba是加密类</p><p><img src="/2022/03/29/kugou/3.png" alt="jadx"></p><p>接下来进行frida hook</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hook</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="keyword">var</span> signatureCls = Java.use(<span class="string">'com.kugou.common.utils.ba'</span>);</span><br><span class="line">signatureCls.b.overload(<span class="string">'java.lang.String'</span>).implementation = <span class="function"><span class="keyword">function</span>(<span class="params">str1</span>)</span>&#123;</span><br><span class="line"><span class="keyword">var</span> result = <span class="keyword">this</span>.b(str1);</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"&gt;&gt;&gt; signature inStr  = "</span> + str1);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">" &gt;&gt;&gt;  signature rc= "</span> + result);</span><br><span class="line"><span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br><span class="line">&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><img src="/2022/03/29/kugou/4.png" alt="hook"></p><p>将抓包结果 利用postman发请求 Copy cURL Reuqest</p><p><img src="/2022/03/29/kugou/5.png" alt="hook"><br><img src="/2022/03/29/kugou/6.png" alt="hook"></p><p>不难发现 我signture 的加密函数就是 我们 请求参数排序 加 盐  md5加密</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">url = <span class="string">"http://m.comment.service.kugou.com/v1/cmtlist?"</span></span><br><span class="line">salt = <span class="string">'OIlwieks28dk2k092lksi2UIkp'</span></span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">'ver'</span>: <span class="string">'10'</span>,</span><br><span class="line">    <span class="string">'code'</span>: <span class="string">'fc4be23b4e972707f36b8a828a93ba8a'</span>,</span><br><span class="line">    <span class="string">'clienttoken'</span>: <span class="string">''</span>,</span><br><span class="line">    <span class="string">'area_code'</span>: <span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'extdata'</span>: <span class="string">'88b790d52570772c3a8b830c0b9b9236'</span>,</span><br><span class="line">    <span class="string">'mid'</span>: <span class="string">'317888404353155346828797154789613205939'</span>,</span><br><span class="line">    <span class="string">'uuid'</span>: <span class="string">'136f14e8929164da7fd59d45a78b65fa'</span>,</span><br><span class="line">    <span class="string">'p'</span>: <span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'dfid'</span>: <span class="string">'0QbvHC39mPM23Ewcap3wo8d1'</span>,</span><br><span class="line">    <span class="string">'show_star_cmts'</span>: <span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'appid'</span>: <span class="string">'1005'</span>,</span><br><span class="line">    <span class="string">'is_show_hot_word'</span>: <span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'pagesize'</span>: <span class="string">'20'</span>,</span><br><span class="line">    <span class="string">'show_classify'</span>: <span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'clientver'</span>: <span class="string">'11145'</span>,</span><br><span class="line">    <span class="string">'tag'</span>: <span class="string">'5'</span>,</span><br><span class="line">    <span class="string">'clienttime'</span>: str(int(time.time())),</span><br><span class="line">    <span class="string">'gitversion'</span>: <span class="string">'bf61921'</span>,</span><br><span class="line">    <span class="string">'kugouid'</span>: <span class="string">'0'</span>,</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 按照 key 排序</span></span><br><span class="line">post_data = collections.OrderedDict(</span><br><span class="line">    sorted(params.items(),</span><br><span class="line">           key=<span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line">)</span><br><span class="line">sortStr = <span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> post_data.items():</span><br><span class="line">    sortStr += k + <span class="string">'='</span> + v</span><br><span class="line">payload=<span class="string">"&#123;\"read_ids\":\"714022189,602347340,609481236\"&#125;"</span></span><br><span class="line"></span><br><span class="line">endstr = salt + sortStr + payload + salt</span><br><span class="line">print(endstr)</span><br><span class="line">m = hashlib.md5()</span><br><span class="line">m.update(endstr.encode(<span class="string">"utf-8"</span>))</span><br><span class="line">signature = m.hexdigest()</span><br><span class="line"></span><br><span class="line">print(signature)</span><br><span class="line">params[<span class="string">'signature'</span>] = signature</span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">  <span class="string">'KG-THash'</span>: <span class="string">'690978f'</span>,</span><br><span class="line">  <span class="string">'User-Agent'</span>: <span class="string">'Android810-AndroidPhone-11145-56-0-COMMENT-wifi'</span>,</span><br><span class="line">  <span class="string">'KG-RC'</span>: <span class="string">'4'</span>,</span><br><span class="line">  <span class="string">'KG-FAKE'</span>: <span class="string">'0'</span>,</span><br><span class="line">  <span class="string">'KG-RF'</span>: <span class="string">'00984990'</span>,</span><br><span class="line">  <span class="string">'Content-Type'</span>: <span class="string">'application/json; charset=utf-8'</span>,</span><br><span class="line">  <span class="string">'Host'</span>: <span class="string">'m.comment.service.kugou.com'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">response = requests.post(url, headers=headers, params= params, data=payload)</span><br><span class="line"></span><br><span class="line">print(response.text)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;Android逆向之某狗signature&quot;&gt;&lt;a href=&quot;#Android逆向之某狗signature&quot; class=&quot;headerlink&quot; title=&quot;Android逆向之某狗signature&quot;&gt;&lt;/a&gt;Android逆向之某狗signature&lt;/
+      
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
+    
+    
+      <category term="逆向" scheme="http://yoursite.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>刷机</title>
@@ -27,8 +53,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;刷机：&quot;&gt;&lt;a href=&quot;#刷机：&quot; class=&quot;headerlink&quot; title=&quot;刷机：&quot;&gt;&lt;/a&gt;刷机：&lt;/h3&gt;&lt;p&gt;1.在 &lt;a href=&quot;https://developers.google.com/android/images&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;谷歌官方工厂镜像网站&lt;/a&gt; 下载对应手机型号和版本的安装包&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/27/%E5%88%B7%E6%9C%BA/1.png&quot; alt=&quot;谷歌官方工厂镜像网站&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget https:&amp;#x2F;&amp;#x2F;dl.google.com&amp;#x2F;dl&amp;#x2F;android&amp;#x2F;aosp&amp;#x2F;bullhead-n2g47o-factory-3ff32f55.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7z x  bullhead-n2g47o-factory-3ff32f55.zip&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;刷机：&quot;&gt;&lt;a href=&quot;#刷机：&quot; class=&quot;headerlink&quot; title=&quot;刷机：&quot;&gt;&lt;/a&gt;刷机：&lt;/h3&gt;&lt;p&gt;1.在 &lt;a href=&quot;https://developers.google.com/android/images&quot; target=
+      
     
     </summary>
     
@@ -51,9 +79,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;frida-kali环境配置&quot;&gt;&lt;a href=&quot;#frida-kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;frida,kali环境配置&quot;&gt;&lt;/a&gt;frida,kali环境配置&lt;/h3&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a href=&quot;https://pan.baidu.com/s/1dPIe5FzZLQzSLMsMcGZUrg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;百度云盘&lt;/a&gt;  提取码：50jw &lt;/p&gt;
-&lt;h4 id=&quot;1-切换root登录&quot;&gt;&lt;a href=&quot;#1-切换root登录&quot; class=&quot;headerlink&quot; title=&quot;1.切换root登录&quot;&gt;&lt;/a&gt;1.切换root登录&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;第一次登录利用 kali  kali&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;在Terminal输入 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    sudo passwd root&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    password for kali: kali&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    New password: toor&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    Retype new password: toor&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;出现passwd: password updated successfully表示成功&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;重启虚拟机就可以 root toor 登录&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;退回bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;chsh -s &amp;#x2F;bin&amp;#x2F;bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reboot&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;2-kali的一些修复操作&quot;&gt;&lt;a href=&quot;#2-kali的一些修复操作&quot; class=&quot;headerlink&quot; title=&quot;2.kali的一些修复操作&quot;&gt;&lt;/a&gt;2.kali的一些修复操作&lt;/h4&gt;
+      
+      
+        &lt;h3 id=&quot;frida-kali环境配置&quot;&gt;&lt;a href=&quot;#frida-kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;frida,kali环境配置&quot;&gt;&lt;/a&gt;frida,kali环境配置&lt;/h3&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a
+      
     
     </summary>
     
@@ -76,8 +105,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;adb命令大全&quot;&gt;&lt;a href=&quot;#adb命令大全&quot; class=&quot;headerlink&quot; title=&quot;adb命令大全&quot;&gt;&lt;/a&gt;adb命令大全&lt;/h3&gt;&lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class=&quot;headerlink&quot; title=&quot;1、查询已连接设备/模拟器&quot;&gt;&lt;/a&gt;1、查询已连接设备/模拟器&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb devices&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h5 id=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;a href=&quot;#2、指定设备获取屏幕分辨率&quot; class=&quot;headerlink&quot; title=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;/a&gt;2、指定设备获取屏幕分辨率&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb -s 设备号 shell wm size&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      
+      
+        &lt;h3 id=&quot;adb命令大全&quot;&gt;&lt;a href=&quot;#adb命令大全&quot; class=&quot;headerlink&quot; title=&quot;adb命令大全&quot;&gt;&lt;/a&gt;adb命令大全&lt;/h3&gt;&lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class
+      
     
     </summary>
     
@@ -98,9 +129,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;objection&quot;&gt;&lt;a href=&quot;#objection&quot; class=&quot;headerlink&quot; title=&quot;objection&quot;&gt;&lt;/a&gt;objection&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Frida只是提供了各种API供我们调用，在此基础之上可以实现具体的功能，比如禁用证书绑定之类的脚本，就是使用Frida的各种API来组合编写而成。于是有大佬将各种常见、常用的功能整合进一个工具，供我们直接在命令行中使用，这个工具便是objection。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;objection功能强大，命令众多，而且不用写一行代码，便可实现诸如内存搜索、类和模块搜索、方法hook打印参数返回值调用栈等常用功能，是一个非常方便的，逆向必备、内存漫游神器&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;1-开启非标准端口frida&quot;&gt;&lt;a href=&quot;#1-开启非标准端口frida&quot; class=&quot;headerlink&quot; title=&quot;1.开启非标准端口frida&quot;&gt;&lt;/a&gt;1.开启非标准端口frida&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;.&amp;#x2F;fs -l 0.0.0.0:8888&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/23/objection/frida01.png&quot; alt=&quot;frida特殊端口&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;objection&quot;&gt;&lt;a href=&quot;#objection&quot; class=&quot;headerlink&quot; title=&quot;objection&quot;&gt;&lt;/a&gt;objection&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;t
+      
     
     </summary>
     
@@ -123,9 +155,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;六层锁机&quot;&gt;&lt;a href=&quot;#六层锁机&quot; class=&quot;headerlink&quot; title=&quot;六层锁机&quot;&gt;&lt;/a&gt;六层锁机&lt;/h3&gt;&lt;h4 id=&quot;登录页&quot;&gt;&lt;a href=&quot;#登录页&quot; class=&quot;headerlink&quot; title=&quot;登录页&quot;&gt;&lt;/a&gt;登录页&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;打开app, 随意输入登录，根据页面提示 利用jadx搜索Login failed&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/23/frida_hook_java/6login.png&quot; alt=&quot;jadx 搜索&quot;&gt;&lt;br&gt;&lt;img src=&quot;/2022/03/23/frida_hook_java/6_login.png&quot; alt=&quot;登录代码&quot;&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;静态分析jadx反编译代码  主要 需要com.example.androiddemo.Activity.LoginActivity.a 方法和 密码相同&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;下面 编写 frida 脚本 主动调用java函数 打印结果&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      
+      
+        &lt;h3 id=&quot;六层锁机&quot;&gt;&lt;a href=&quot;#六层锁机&quot; class=&quot;headerlink&quot; title=&quot;六层锁机&quot;&gt;&lt;/a&gt;六层锁机&lt;/h3&gt;&lt;h4 id=&quot;登录页&quot;&gt;&lt;a href=&quot;#登录页&quot; class=&quot;headerlink&quot; title=&quot;登录页&quot;&gt;&lt;/a&gt;登录
+      
     
     </summary>
     
@@ -148,9 +181,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;基本信息&quot;&gt;&lt;a href=&quot;#基本信息&quot; class=&quot;headerlink&quot; title=&quot;基本信息&quot;&gt;&lt;/a&gt;基本信息&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;app version: 4.69.5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;手机: Piexl3 XL  Android 10 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;抓包: charles + SagerNet&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;用到的工具: jadx, frida, ida&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1.利用 charles + SagerNet, 抓详商品详情页的包，很明显 newSign就是我们要分析的参数&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/21/dewu/img.png&quot; alt=&quot;抓包&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;基本信息&quot;&gt;&lt;a href=&quot;#基本信息&quot; class=&quot;headerlink&quot; title=&quot;基本信息&quot;&gt;&lt;/a&gt;基本信息&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr
+      
     
     </summary>
     
@@ -173,8 +207,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Auto-js结合-Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;a href=&quot;#Auto-js结合-Mimtproxy爬取抖音店铺数据&quot; class=&quot;headerlink&quot; title=&quot;Auto.js结合 Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;/a&gt;Auto.js结合 Mimtproxy爬取抖音店铺数据&lt;/h3&gt;&lt;h4 id=&quot;软件的安装&quot;&gt;&lt;a href=&quot;#软件的安装&quot; class=&quot;headerlink&quot; title=&quot;软件的安装&quot;&gt;&lt;/a&gt;软件的安装&lt;/h4&gt;&lt;h5 id=&quot;1-Auto-js&quot;&gt;&lt;a href=&quot;#1-Auto-js&quot; class=&quot;headerlink&quot; title=&quot;1.Auto.js&quot;&gt;&lt;/a&gt;1.Auto.js&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Auto.js是Android上支持Node.js的JavaScript自动化和编程软件。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;由于auto.js被大量用于黑产目前作者，不支持，不维护免费版。只有维护付费版Auto.js Pro。&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;1.模拟器安装是AutoJs4.1.0.apk免费版&lt;br&gt;auto.js 安装时开启无障碍服务&lt;br&gt;&lt;img src=&quot;/2022/03/20/Autojs/img.png&quot; alt=&quot;img.png&quot;&gt;&lt;br&gt;可以设置 按音量向上建停止代码，防止写无限循环推不出来&lt;br&gt;2.电脑端安装vscode&lt;br&gt;安装auto.js插件，输入如hyb1996，将两个插件进行安装&lt;br&gt;&lt;img src=&quot;/2022/03/20/Autojs/img_3.png&quot; alt=&quot;安装插件&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;Auto-js结合-Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;a href=&quot;#Auto-js结合-Mimtproxy爬取抖音店铺数据&quot; class=&quot;headerlink&quot; title=&quot;Auto.js结合 Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;/a&gt;Auto.
+      
     
     </summary>
     
@@ -197,9 +233,11 @@
     
     <summary type="html">
     
-      &lt;p&gt;记录一些安卓抓包的工具&lt;/p&gt;
-&lt;h3 id=&quot;一-Charles-抓包&quot;&gt;&lt;a href=&quot;#一-Charles-抓包&quot; class=&quot;headerlink&quot; title=&quot;一. Charles 抓包&quot;&gt;&lt;/a&gt;一. Charles 抓包&lt;/h3&gt;&lt;h4 id=&quot;1-charles-设置&quot;&gt;&lt;a href=&quot;#1-charles-设置&quot; class=&quot;headerlink&quot; title=&quot;1.charles 设置&quot;&gt;&lt;/a&gt;1.charles 设置&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://www.charlesproxy.com/download/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;charles安装网址&lt;/a&gt;&lt;/p&gt;
-&lt;h5 id=&quot;proxy-—-gt-ssl-proxying-settings-—-gt-add-—-gt-设置&quot;&gt;&lt;a href=&quot;#proxy-—-gt-ssl-proxying-settings-—-gt-add-—-gt-设置&quot; class=&quot;headerlink&quot; title=&quot;proxy —&amp;gt; ssl proxying settings —&amp;gt; add —&amp;gt; 设置 &quot;&gt;&lt;/a&gt;proxy —&amp;gt; ssl proxying settings —&amp;gt; add —&amp;gt; 设置&lt;em&gt; &lt;/em&gt;&lt;/h5&gt;
+      
+      
+        &lt;p&gt;记录一些安卓抓包的工具&lt;/p&gt;
+&lt;h3 id=&quot;一-Charles-抓包&quot;&gt;&lt;a href=&quot;#一-Charles-抓包&quot; class=&quot;headerlink&quot; title=&quot;一. Charles 抓包&quot;&gt;&lt;/a&gt;一. Charles 抓包&lt;/h3&gt;&lt;h4 id=&quot;1-ch
+      
     
     </summary>
     
