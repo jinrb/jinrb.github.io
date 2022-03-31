@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2022-03-30T15:32:50.960Z</updated>
+  <updated>2022-03-31T15:23:44.262Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android逆向之某东到家djencrypt</title>
+    <link href="http://yoursite.com/2022/03/31/JDDJ/"/>
+    <id>http://yoursite.com/2022/03/31/JDDJ/</id>
+    <published>2022-03-31T02:55:44.000Z</published>
+    <updated>2022-03-31T15:23:44.262Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="抓包-charles-SagerNet"><a href="#抓包-charles-SagerNet" class="headerlink" title="抓包 charles + SagerNet"></a>抓包 charles + SagerNet</h4><p><img src="/2022/03/31/JDDJ/1.png" alt="抓包"></p><h4 id="jadx-静态分析"><a href="#jadx-静态分析" class="headerlink" title="jadx 静态分析"></a>jadx 静态分析</h4><p>搜索 “djencrypt”  很幸运就一个结果</p><p><img src="/2022/03/31/JDDJ/2.png" alt="jadx搜索"></p><p>进去跟踪函数</p><p><img src="/2022/03/31/JDDJ/3.png" alt="jadx搜索"><br><img src="/2022/03/31/JDDJ/4.png" alt="jadx搜索"><br><img src="/2022/03/31/JDDJ/5.png" alt="jadx搜索"><br><img src="/2022/03/31/JDDJ/6.png" alt="jadx搜索"></p><p>可以看到djencrypt  猜想是 先aes加密在base64 加密下</p><h4 id="打开-逆向之友-https-gchq-github-io-CyberChef"><a href="#打开-逆向之友-https-gchq-github-io-CyberChef" class="headerlink" title="打开 逆向之友 https://gchq.github.io/CyberChef/"></a>打开 逆向之友 <a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">https://gchq.github.io/CyberChef/</a></h4><p>CyberChef 解密</p><p><img src="/2022/03/31/JDDJ/img.png" alt="7.png"></p><h4 id="frida-hook"><a href="#frida-hook" class="headerlink" title="frida hook"></a>frida hook</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hook_djencrypt</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">Java.perform(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">Java.use(<span class="string">"com.jd.jdsdk.security.AesCbcCrypto"</span>).encrypt.overload(<span class="string">'java.lang.String'</span>, <span class="string">'java.lang.String'</span>, <span class="string">'[B'</span>).implementation = <span class="function"><span class="keyword">function</span> (<span class="params">str1,str2,b1</span>) </span>&#123;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"str1=&gt;"</span>,str1,<span class="string">"&lt;=="</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"str2=&gt;"</span>, str2);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"b1=&gt;"</span>, b1)</span><br><span class="line"><span class="keyword">var</span> result = <span class="keyword">this</span>.encrypt(str1, str2, b1);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"result=&gt;"</span>, result);</span><br><span class="line"><span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line">&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>hook结果和前面的CyberChef类似，所以我们前面的猜想是正确的</p><p><img src="/2022/03/31/JDDJ/7.png" alt="frida hook.png"></p><p>但是我们发现传入的参数还有个signKeyV1，继续分析</p><p>利用jadx 搜索可知 signKeyV1 是由k2 函数加密的，k2 是native函数，应该在jdpdj相关的so中</p><p><img src="/2022/03/31/JDDJ/8.png" alt="jadx"><br><img src="/2022/03/31/JDDJ/9.png" alt="jadx"></p><h4 id="ida-分析-libjdpdj-so"><a href="#ida-分析-libjdpdj-so" class="headerlink" title="ida 分析 libjdpdj.so"></a>ida 分析 libjdpdj.so</h4><p>搜索jin,定位到k2</p><p><img src="/2022/03/31/JDDJ/10.png" alt="ida"><br><img src="/2022/03/31/JDDJ/11.png" alt="ida"></p><p>进入g_k2 搜索发现 hmac_sha256</p><p><img src="/2022/03/31/JDDJ/12.png" alt="ida"><br><img src="/2022/03/31/JDDJ/13.png" alt="ida"><br>这里的符号都没去掉，init update final 函数都能看到，这里应该是标准的算法</p><h4 id="frida-hook-native"><a href="#frida-hook-native" class="headerlink" title="frida hook native"></a>frida hook native</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure><p>MAC_Init_ex so 函数的参数二，长度 32 猜测是 hamc key<br><img src="/2022/03/31/JDDJ/14.png" alt="ida"></p><p>AES python<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AESCrypt</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    AES/CBC/PKCS5Padding 加密</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, key, iv)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        使用密钥,加密模式进行初始化</span></span><br><span class="line"><span class="string">        :param key:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span> len(key) != <span class="number">16</span>:</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(<span class="string">'密钥长度非16位!!!'</span>)</span><br><span class="line"></span><br><span class="line">        self.key = str.encode(key)</span><br><span class="line">        self.iv = str.encode(iv)</span><br><span class="line">        self.MODE = AES.MODE_CBC</span><br><span class="line">        self.block_size = <span class="number">16</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 填充函数</span></span><br><span class="line">        <span class="comment"># self.padding = lambda data: data + (self.block_size - len(data) % self.block_size) * chr(self.block_size - len(data) % self.block_size)</span></span><br><span class="line">        <span class="comment"># 此处为一坑,需要现将data转换为byte再来做填充，否则中文特殊字符等会报错</span></span><br><span class="line">        self.padding = <span class="keyword">lambda</span> data: data + (self.block_size - len(data.encode(<span class="string">'utf-8'</span>)) % self.block_size) * chr(</span><br><span class="line">            self.block_size - len(data.encode(<span class="string">'utf-8'</span>)) % self.block_size)</span><br><span class="line">        <span class="comment"># 截断函数</span></span><br><span class="line">        self.unpadding = <span class="keyword">lambda</span> data: data[:-ord(data[<span class="number">-1</span>])]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">aes_encrypt</span><span class="params">(self, plaintext)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        加密</span></span><br><span class="line"><span class="string">        :param plaintext: 明文</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 填充16位</span></span><br><span class="line">            padding_text = self.padding(plaintext).encode(<span class="string">"utf-8"</span>)</span><br><span class="line">            <span class="comment"># 初始化加密器</span></span><br><span class="line">            cryptor = AES.new(self.key, self.MODE, self.iv)</span><br><span class="line">            <span class="comment"># 进行AES加密</span></span><br><span class="line">            encrypt_aes = cryptor.encrypt(padding_text)</span><br><span class="line">            <span class="comment"># 进行BASE64转码</span></span><br><span class="line">            encrypt_text = (base64.b64encode(encrypt_aes)).decode()</span><br><span class="line">            <span class="keyword">return</span> encrypt_text</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logging.exception(e)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">aes_decrypt</span><span class="params">(self, ciphertext)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        解密</span></span><br><span class="line"><span class="string">        :param ciphertext: 密文</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 密文必须是16byte的整数倍</span></span><br><span class="line">            <span class="comment"># if len(ciphertext) % 16 != 0:</span></span><br><span class="line">            <span class="comment">#     raise binascii.Error('密文错误!')</span></span><br><span class="line">            cryptor = AES.new(self.key, self.MODE, self.iv)</span><br><span class="line">            <span class="comment"># 进行BASE64转码</span></span><br><span class="line">            plain_base64 = base64.b64decode(ciphertext)</span><br><span class="line">            <span class="comment"># 进行ASE解密</span></span><br><span class="line">            decrypt_text = cryptor.decrypt(plain_base64)</span><br><span class="line">            <span class="comment"># 截取</span></span><br><span class="line">            plain_text = self.unpadding(decrypt_text.decode(<span class="string">"utf-8"</span>))</span><br><span class="line">            <span class="keyword">return</span> plain_text</span><br><span class="line">        <span class="keyword">except</span> UnicodeDecodeError <span class="keyword">as</span> e:</span><br><span class="line">            logging.error(<span class="string">'解密失败,请检查密钥是否正确!'</span>)</span><br><span class="line">            logging.exception(e)</span><br><span class="line">        <span class="keyword">except</span> binascii.Error <span class="keyword">as</span> e:</span><br><span class="line">            logging.exception(e)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            logging.exception(e)</span><br></pre></td></tr></table></figure></p><p>python hmac_sha256<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">import</span> hmac</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hmac_sha256_encrypt</span><span class="params">(self, key, data)</span>:</span></span><br><span class="line">    _key = key.encode(<span class="string">'utf8'</span>)</span><br><span class="line">    _data = data.encode(<span class="string">'utf8'</span>)</span><br><span class="line">    encrypt_data = hmac.new(_key, _data, digestmod=sha256).hexdigest()</span><br><span class="line">    <span class="comment"># print(encrypt_data)</span></span><br><span class="line">    <span class="keyword">return</span> encrypt_data</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;抓包-charles-SagerNet&quot;&gt;&lt;a href=&quot;#抓包-charles-SagerNet&quot; class=&quot;headerlink&quot; title=&quot;抓包 charles + SagerNet&quot;&gt;&lt;/a&gt;抓包 charles + SagerNet&lt;/h4&gt;&lt;
+      
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
+    
+    
+      <category term="逆向" scheme="http://yoursite.com/tags/%E9%80%86%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title>xposed 的基本使用</title>
@@ -27,19 +53,10 @@
     
     <summary type="html">
     
-      &lt;h4 id=&quot;官网Api&quot;&gt;&lt;a href=&quot;#官网Api&quot; class=&quot;headerlink&quot; title=&quot;官网Api&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://api.xposed.info/reference/packages.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官网Api&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;新手入门文章&quot;&gt;&lt;a href=&quot;#新手入门文章&quot; class=&quot;headerlink&quot; title=&quot;新手入门文章&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://www.freebuf.com/articles/terminal/189021.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;新手入门文章&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;xposed-创建&quot;&gt;&lt;a href=&quot;#xposed-创建&quot; class=&quot;headerlink&quot; title=&quot;xposed 创建&quot;&gt;&lt;/a&gt;xposed 创建&lt;/h4&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;在/app/src/main/AndroidManifest.xml 添加&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;meta-data&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:name&amp;#x3D;&amp;quot;xposedmodule&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:value&amp;#x3D;&amp;quot;true&amp;quot; &amp;#x2F;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;meta-data&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:name&amp;#x3D;&amp;quot;xposeddescription&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:value&amp;#x3D;&amp;quot;这是一个Xposed例程&amp;quot; &amp;#x2F;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;meta-data&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:name&amp;#x3D;&amp;quot;xposedminversion&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:value&amp;#x3D;&amp;quot;53&amp;quot; &amp;#x2F;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;/app/src、build.gradle 添加&lt;/p&gt;
- &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;repositories &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    jcenter()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;dependencies &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    compileOnly &amp;#39;de.robv.android.xposed:api:82&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    compileOnly &amp;#39;de.robv.android.xposed:api:82:sources&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    implementation &amp;#39;androidx.appcompat:appcompat:1.1.0&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    implementation &amp;#39;com.google.android.material:material:1.1.0&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    implementation &amp;#39;androidx.constraintlayout:constraintlayout:1.1.3&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    testImplementation &amp;#39;junit:junit:4.+&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    androidTestImplementation &amp;#39;androidx.test.ext:junit:1.1.1&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    androidTestImplementation &amp;#39;androidx.test.espresso:espresso-core:3.2.0&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;编写hook代码 HookTest.java&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;右键点击 “main ” 文件夹 ， 选择new —&amp;gt; Folder —&amp;gt;Assets Folder，新建assets 文件夹 在建xposed_init文件，里面填写hook脚本文件路径&lt;br&gt;  &lt;img src=&quot;/2022/03/30/Xposed/img.png&quot; alt=&quot;img.png&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&quot;hook-构造函数&quot;&gt;&lt;a href=&quot;#hook-构造函数&quot; class=&quot;headerlink&quot; title=&quot;hook 构造函数&quot;&gt;&lt;/a&gt;hook 构造函数&lt;/h4&gt;
+      
+      
+        &lt;h4 id=&quot;官网Api&quot;&gt;&lt;a href=&quot;#官网Api&quot; class=&quot;headerlink&quot; title=&quot;官网Api&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://api.xposed.info/reference/packages.html&quot; target=&quot;_blan
+      
     
     </summary>
     
@@ -62,9 +79,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Android逆向之某狗signature&quot;&gt;&lt;a href=&quot;#Android逆向之某狗signature&quot; class=&quot;headerlink&quot; title=&quot;Android逆向之某狗signature&quot;&gt;&lt;/a&gt;Android逆向之某狗signature&lt;/h3&gt;&lt;h4 id=&quot;抓包-charles-vpn&quot;&gt;&lt;a href=&quot;#抓包-charles-vpn&quot; class=&quot;headerlink&quot; title=&quot;抓包 charles + vpn&quot;&gt;&lt;/a&gt;抓包 charles + vpn&lt;/h4&gt;&lt;p&gt;app version 11.1.4&lt;/p&gt;
-&lt;p&gt;今天我们分析一个简单的app的signature,首先先抓包&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/29/kugou/1.png&quot; alt=&quot;抓包&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;Android逆向之某狗signature&quot;&gt;&lt;a href=&quot;#Android逆向之某狗signature&quot; class=&quot;headerlink&quot; title=&quot;Android逆向之某狗signature&quot;&gt;&lt;/a&gt;Android逆向之某狗signature&lt;/
+      
     
     </summary>
     
@@ -87,8 +105,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;刷机：&quot;&gt;&lt;a href=&quot;#刷机：&quot; class=&quot;headerlink&quot; title=&quot;刷机：&quot;&gt;&lt;/a&gt;刷机：&lt;/h3&gt;&lt;p&gt;1.在 &lt;a href=&quot;https://developers.google.com/android/images&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;谷歌官方工厂镜像网站&lt;/a&gt; 下载对应手机型号和版本的安装包&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/27/%E5%88%B7%E6%9C%BA/1.png&quot; alt=&quot;谷歌官方工厂镜像网站&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget https:&amp;#x2F;&amp;#x2F;dl.google.com&amp;#x2F;dl&amp;#x2F;android&amp;#x2F;aosp&amp;#x2F;bullhead-n2g47o-factory-3ff32f55.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7z x  bullhead-n2g47o-factory-3ff32f55.zip&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;刷机：&quot;&gt;&lt;a href=&quot;#刷机：&quot; class=&quot;headerlink&quot; title=&quot;刷机：&quot;&gt;&lt;/a&gt;刷机：&lt;/h3&gt;&lt;p&gt;1.在 &lt;a href=&quot;https://developers.google.com/android/images&quot; target=
+      
     
     </summary>
     
@@ -111,9 +131,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;frida-kali环境配置&quot;&gt;&lt;a href=&quot;#frida-kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;frida,kali环境配置&quot;&gt;&lt;/a&gt;frida,kali环境配置&lt;/h3&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a href=&quot;https://pan.baidu.com/s/1dPIe5FzZLQzSLMsMcGZUrg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;百度云盘&lt;/a&gt;  提取码：50jw &lt;/p&gt;
-&lt;h4 id=&quot;1-切换root登录&quot;&gt;&lt;a href=&quot;#1-切换root登录&quot; class=&quot;headerlink&quot; title=&quot;1.切换root登录&quot;&gt;&lt;/a&gt;1.切换root登录&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;第一次登录利用 kali  kali&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;在Terminal输入 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    sudo passwd root&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    password for kali: kali&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    New password: toor&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    Retype new password: toor&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;出现passwd: password updated successfully表示成功&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;重启虚拟机就可以 root toor 登录&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;退回bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;chsh -s &amp;#x2F;bin&amp;#x2F;bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reboot&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;2-kali的一些修复操作&quot;&gt;&lt;a href=&quot;#2-kali的一些修复操作&quot; class=&quot;headerlink&quot; title=&quot;2.kali的一些修复操作&quot;&gt;&lt;/a&gt;2.kali的一些修复操作&lt;/h4&gt;
+      
+      
+        &lt;h3 id=&quot;frida-kali环境配置&quot;&gt;&lt;a href=&quot;#frida-kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;frida,kali环境配置&quot;&gt;&lt;/a&gt;frida,kali环境配置&lt;/h3&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a
+      
     
     </summary>
     
@@ -136,8 +157,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;adb命令大全&quot;&gt;&lt;a href=&quot;#adb命令大全&quot; class=&quot;headerlink&quot; title=&quot;adb命令大全&quot;&gt;&lt;/a&gt;adb命令大全&lt;/h3&gt;&lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class=&quot;headerlink&quot; title=&quot;1、查询已连接设备/模拟器&quot;&gt;&lt;/a&gt;1、查询已连接设备/模拟器&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb devices&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h5 id=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;a href=&quot;#2、指定设备获取屏幕分辨率&quot; class=&quot;headerlink&quot; title=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;/a&gt;2、指定设备获取屏幕分辨率&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb -s 设备号 shell wm size&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      
+      
+        &lt;h3 id=&quot;adb命令大全&quot;&gt;&lt;a href=&quot;#adb命令大全&quot; class=&quot;headerlink&quot; title=&quot;adb命令大全&quot;&gt;&lt;/a&gt;adb命令大全&lt;/h3&gt;&lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class
+      
     
     </summary>
     
@@ -158,9 +181,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;objection&quot;&gt;&lt;a href=&quot;#objection&quot; class=&quot;headerlink&quot; title=&quot;objection&quot;&gt;&lt;/a&gt;objection&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Frida只是提供了各种API供我们调用，在此基础之上可以实现具体的功能，比如禁用证书绑定之类的脚本，就是使用Frida的各种API来组合编写而成。于是有大佬将各种常见、常用的功能整合进一个工具，供我们直接在命令行中使用，这个工具便是objection。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;objection功能强大，命令众多，而且不用写一行代码，便可实现诸如内存搜索、类和模块搜索、方法hook打印参数返回值调用栈等常用功能，是一个非常方便的，逆向必备、内存漫游神器&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;1-开启非标准端口frida&quot;&gt;&lt;a href=&quot;#1-开启非标准端口frida&quot; class=&quot;headerlink&quot; title=&quot;1.开启非标准端口frida&quot;&gt;&lt;/a&gt;1.开启非标准端口frida&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;.&amp;#x2F;fs -l 0.0.0.0:8888&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/23/objection/frida01.png&quot; alt=&quot;frida特殊端口&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;objection&quot;&gt;&lt;a href=&quot;#objection&quot; class=&quot;headerlink&quot; title=&quot;objection&quot;&gt;&lt;/a&gt;objection&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;t
+      
     
     </summary>
     
@@ -183,9 +207,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;六层锁机&quot;&gt;&lt;a href=&quot;#六层锁机&quot; class=&quot;headerlink&quot; title=&quot;六层锁机&quot;&gt;&lt;/a&gt;六层锁机&lt;/h3&gt;&lt;h4 id=&quot;登录页&quot;&gt;&lt;a href=&quot;#登录页&quot; class=&quot;headerlink&quot; title=&quot;登录页&quot;&gt;&lt;/a&gt;登录页&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;打开app, 随意输入登录，根据页面提示 利用jadx搜索Login failed&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/23/frida_hook_java/6login.png&quot; alt=&quot;jadx 搜索&quot;&gt;&lt;br&gt;&lt;img src=&quot;/2022/03/23/frida_hook_java/6_login.png&quot; alt=&quot;登录代码&quot;&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;静态分析jadx反编译代码  主要 需要com.example.androiddemo.Activity.LoginActivity.a 方法和 密码相同&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;下面 编写 frida 脚本 主动调用java函数 打印结果&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      
+      
+        &lt;h3 id=&quot;六层锁机&quot;&gt;&lt;a href=&quot;#六层锁机&quot; class=&quot;headerlink&quot; title=&quot;六层锁机&quot;&gt;&lt;/a&gt;六层锁机&lt;/h3&gt;&lt;h4 id=&quot;登录页&quot;&gt;&lt;a href=&quot;#登录页&quot; class=&quot;headerlink&quot; title=&quot;登录页&quot;&gt;&lt;/a&gt;登录
+      
     
     </summary>
     
@@ -208,9 +233,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;基本信息&quot;&gt;&lt;a href=&quot;#基本信息&quot; class=&quot;headerlink&quot; title=&quot;基本信息&quot;&gt;&lt;/a&gt;基本信息&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;app version: 4.69.5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;手机: Piexl3 XL  Android 10 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;抓包: charles + SagerNet&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;用到的工具: jadx, frida, ida&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1.利用 charles + SagerNet, 抓详商品详情页的包，很明显 newSign就是我们要分析的参数&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/21/dewu/img.png&quot; alt=&quot;抓包&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;基本信息&quot;&gt;&lt;a href=&quot;#基本信息&quot; class=&quot;headerlink&quot; title=&quot;基本信息&quot;&gt;&lt;/a&gt;基本信息&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr
+      
     
     </summary>
     
@@ -233,8 +259,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Auto-js结合-Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;a href=&quot;#Auto-js结合-Mimtproxy爬取抖音店铺数据&quot; class=&quot;headerlink&quot; title=&quot;Auto.js结合 Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;/a&gt;Auto.js结合 Mimtproxy爬取抖音店铺数据&lt;/h3&gt;&lt;h4 id=&quot;软件的安装&quot;&gt;&lt;a href=&quot;#软件的安装&quot; class=&quot;headerlink&quot; title=&quot;软件的安装&quot;&gt;&lt;/a&gt;软件的安装&lt;/h4&gt;&lt;h5 id=&quot;1-Auto-js&quot;&gt;&lt;a href=&quot;#1-Auto-js&quot; class=&quot;headerlink&quot; title=&quot;1.Auto.js&quot;&gt;&lt;/a&gt;1.Auto.js&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Auto.js是Android上支持Node.js的JavaScript自动化和编程软件。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;由于auto.js被大量用于黑产目前作者，不支持，不维护免费版。只有维护付费版Auto.js Pro。&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;1.模拟器安装是AutoJs4.1.0.apk免费版&lt;br&gt;auto.js 安装时开启无障碍服务&lt;br&gt;&lt;img src=&quot;/2022/03/20/Autojs/img.png&quot; alt=&quot;img.png&quot;&gt;&lt;br&gt;可以设置 按音量向上建停止代码，防止写无限循环推不出来&lt;br&gt;2.电脑端安装vscode&lt;br&gt;安装auto.js插件，输入如hyb1996，将两个插件进行安装&lt;br&gt;&lt;img src=&quot;/2022/03/20/Autojs/img_3.png&quot; alt=&quot;安装插件&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;Auto-js结合-Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;a href=&quot;#Auto-js结合-Mimtproxy爬取抖音店铺数据&quot; class=&quot;headerlink&quot; title=&quot;Auto.js结合 Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;/a&gt;Auto.
+      
     
     </summary>
     
@@ -257,9 +285,11 @@
     
     <summary type="html">
     
-      &lt;p&gt;记录一些安卓抓包的工具&lt;/p&gt;
-&lt;h3 id=&quot;一-Charles-抓包&quot;&gt;&lt;a href=&quot;#一-Charles-抓包&quot; class=&quot;headerlink&quot; title=&quot;一. Charles 抓包&quot;&gt;&lt;/a&gt;一. Charles 抓包&lt;/h3&gt;&lt;h4 id=&quot;1-charles-设置&quot;&gt;&lt;a href=&quot;#1-charles-设置&quot; class=&quot;headerlink&quot; title=&quot;1.charles 设置&quot;&gt;&lt;/a&gt;1.charles 设置&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://www.charlesproxy.com/download/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;charles安装网址&lt;/a&gt;&lt;/p&gt;
-&lt;h5 id=&quot;proxy-—-gt-ssl-proxying-settings-—-gt-add-—-gt-设置&quot;&gt;&lt;a href=&quot;#proxy-—-gt-ssl-proxying-settings-—-gt-add-—-gt-设置&quot; class=&quot;headerlink&quot; title=&quot;proxy —&amp;gt; ssl proxying settings —&amp;gt; add —&amp;gt; 设置 &quot;&gt;&lt;/a&gt;proxy —&amp;gt; ssl proxying settings —&amp;gt; add —&amp;gt; 设置&lt;em&gt; &lt;/em&gt;&lt;/h5&gt;
+      
+      
+        &lt;p&gt;记录一些安卓抓包的工具&lt;/p&gt;
+&lt;h3 id=&quot;一-Charles-抓包&quot;&gt;&lt;a href=&quot;#一-Charles-抓包&quot; class=&quot;headerlink&quot; title=&quot;一. Charles 抓包&quot;&gt;&lt;/a&gt;一. Charles 抓包&lt;/h3&gt;&lt;h4 id=&quot;1-ch
+      
     
     </summary>
     
