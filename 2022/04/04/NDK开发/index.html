@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="NDK 官方文档NDK JNI简书文章介绍NDK JNI 开发1. 静态注册MainActivity.java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NDK JNI 开发">
+<meta property="og:url" content="http://yoursite.com/2022/04/04/NDK%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="凡人逆向">
+<meta property="og:description" content="NDK 官方文档NDK JNI简书文章介绍NDK JNI 开发1. 静态注册MainActivity.java">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2022/04/04/NDK%E5%BC%80%E5%8F%91/ndk3.png">
+<meta property="og:image" content="http://yoursite.com/2022/04/04/NDK%E5%BC%80%E5%8F%91/ndk4.png">
+<meta property="article:published_time" content="2022-04-04T15:55:44.000Z">
+<meta property="article:modified_time" content="2022-04-04T16:02:12.327Z">
+<meta property="article:author" content="恰米">
+<meta property="article:tag" content="NDK">
+<meta property="article:tag" content="JNI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2022/04/04/NDK%E5%BC%80%E5%8F%91/ndk3.png">
+
+<link rel="canonical" href="http://yoursite.com/2022/04/04/NDK%E5%BC%80%E5%8F%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>NDK JNI 开发 | 凡人逆向</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="凡人逆向" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">凡人逆向</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">一切都是命运石之门的选择</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/jinrb" class="github-corner" title="JRB GitHub" aria-label="JRB GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/04/04/NDK%E5%BC%80%E5%8F%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="恰米">
+      <meta itemprop="description" content="一个懒惰凡人的blog">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="凡人逆向">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NDK JNI 开发
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-04 23:55:44" itemprop="dateCreated datePublished" datetime="2022-04-04T23:55:44+08:00">2022-04-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-05 00:02:12" itemprop="dateModified" datetime="2022-04-05T00:02:12+08:00">2022-04-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="NDK-官方文档"><a href="#NDK-官方文档" class="headerlink" title="NDK 官方文档"></a><a href="https://developer.android.com/ndk/guides" target="_blank" rel="noopener">NDK 官方文档</a></h3><h3 id="NDK-JNI简书文章介绍"><a href="#NDK-JNI简书文章介绍" class="headerlink" title="NDK JNI简书文章介绍"></a><a href="https://www.jianshu.com/p/87ce6f565d37" target="_blank" rel="noopener">NDK JNI简书文章介绍</a></h3><h3 id="NDK-JNI-开发"><a href="#NDK-JNI-开发" class="headerlink" title="NDK JNI 开发"></a>NDK JNI 开发</h3><h4 id="1-静态注册"><a href="#1-静态注册" class="headerlink" title="1. 静态注册"></a>1. 静态注册</h4><p>MainActivity.java<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static native String mdString(String string);</span><br></pre></td></tr></table></figure><br>native-lib.cpp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">extern &quot;C&quot; JNIEXPORT jstring JNICALL Java_com_jrb_easymd5_MainActivity_mdString(</span><br><span class="line">        JNIEnv *env, jclass obj, jstring str) &#123;....&#125;</span><br><span class="line">&#x2F;&#x2F; extern &quot;C&quot; JNIEXPORT 返回类型 JNICALL Java_包名_类名_方法名(JNIEnv *env, jclass obj, 入参)</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-动态注册-JNI-OnLoad-Native-化"><a href="#2-动态注册-JNI-OnLoad-Native-化" class="headerlink" title="2. 动态注册 JNI_OnLoad Native 化"></a>2. 动态注册 JNI_OnLoad Native 化</h4><p>native-lib.cpp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">JNIEXPORT jstring JNICALL ffff(JNIEnv *env, jclass jcls, jstring str_) &#123;...&#125;</span><br><span class="line"></span><br><span class="line">static JNINativeMethod method_table[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;mdString&quot;, &quot;(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;String;&quot;, (void *) ffff&#125;,</span><br><span class="line">       &#x2F;&#x2F; java方法名   signtrue 参数;结果                       native方法名</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">static int registerMethods(JNIEnv *env, const char *className,</span><br><span class="line">                           JNINativeMethod *gMethods, int numMethods) &#123;</span><br><span class="line">    jclass clazz &#x3D; env-&gt;FindClass(className);</span><br><span class="line">    if (clazz &#x3D;&#x3D; nullptr) &#123;</span><br><span class="line">        return JNI_FALSE;</span><br><span class="line">    &#125;</span><br><span class="line">    if (env-&gt;RegisterNatives(clazz, gMethods, numMethods) &lt; 0) &#123;</span><br><span class="line">        return JNI_FALSE;</span><br><span class="line">    &#125;</span><br><span class="line">    return JNI_TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) &#123;</span><br><span class="line">    JNIEnv *env &#x3D; nullptr;</span><br><span class="line">    if (vm-&gt;GetEnv((void **) &amp;env, JNI_VERSION_1_6) !&#x3D; JNI_OK) &#123;</span><br><span class="line">        return JNI_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 注册native方法</span><br><span class="line">    if (!registerMethods(env,&quot;com&#x2F;jrb&#x2F;easymd5&#x2F;MainActivity&quot; , method_table, NELEM(method_table))) &#123;</span><br><span class="line">        &#x2F;&#x2F;                     java类                             方法              方法长度</span><br><span class="line">        return JNI_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    return JNI_VERSION_1_6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-native-调用java-方法"><a href="#3-native-调用java-方法" class="headerlink" title="3.native 调用java 方法"></a>3.native 调用java 方法</h4><p>MainActivity.java<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public native String Refmd5sec(String string); &#x2F;&#x2F; 动态实现</span><br><span class="line">public static native String Refmd5(String string);  &#x2F;&#x2F;静态实现</span><br><span class="line">public String Javamd5(String string) &#123;   &#x2F;&#x2F; java 实现MD5&#125;</span><br></pre></td></tr></table></figure><br>native-lib.cpp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">extern &quot;C&quot;</span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_roysue_easymd5_MainActivity_Refmd5sec(JNIEnv *env, jobject object, jstring string) &#123;</span><br><span class="line">    &#x2F;&#x2F; TODO: implement Refmd5sec()</span><br><span class="line">    jclass MainActivity &#x3D; env-&gt;FindClass(&quot;com&#x2F;roysue&#x2F;easymd5&#x2F;MainActivity&quot;);  &#x2F;&#x2F; 寻找类</span><br><span class="line">    jmethodID Javamd5 &#x3D; env-&gt;GetMethodID(MainActivity,&quot;Javamd5&quot;,&quot;(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;String;&quot;); &#x2F;&#x2F; 获得方法</span><br><span class="line">    jstring result &#x3D; static_cast&lt;jstring&gt;(env-&gt;CallObjectMethod(object,Javamd5,string) ); &#x2F;&#x2F; 调用动态方法</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">extern &quot;C&quot;</span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_roysue_easymd5_MainActivity_Refmd5(JNIEnv *env, jclass clazz, jstring string) &#123;</span><br><span class="line">    &#x2F;&#x2F; TODO: implement Refmd5()</span><br><span class="line">    &#x2F;&#x2F; MessageDigest md5 &#x3D; MessageDigest.getInstance(&quot;MD5&quot;);</span><br><span class="line">    jclass MessageDigest &#x3D; env-&gt;FindClass(&quot;java&#x2F;security&#x2F;MessageDigest&quot;); &#x2F;&#x2F; 寻找类</span><br><span class="line">    jmethodID getInstance &#x3D; env-&gt;GetStaticMethodID(MessageDigest,&quot;getInstance&quot;, &quot;(Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;security&#x2F;MessageDigest;&quot;);  &#x2F;&#x2F; 获得方法</span><br><span class="line">    jstring MD5 &#x3D; env-&gt;NewStringUTF(&quot;MD5&quot;);  &#x2F;&#x2F; 构造字符串</span><br><span class="line">    jobject md5 &#x3D; env-&gt;CallStaticObjectMethod(MessageDigest,getInstance,MD5);  &#x2F;&#x2F; 构造MD5对象</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; byte[] bytes &#x3D; md5.digest(string.getBytes());</span><br><span class="line">    jmethodID digest &#x3D; env-&gt;GetMethodID(MessageDigest,&quot;digest&quot;, &quot;([B)[B&quot;);</span><br><span class="line">    jclass stringClass &#x3D; env-&gt;FindClass(&quot;java&#x2F;lang&#x2F;String&quot;);</span><br><span class="line">    jmethodID getBytes &#x3D; env-&gt;GetMethodID(stringClass,&quot;getBytes&quot;, &quot;()[B&quot;); </span><br><span class="line">    jbyteArray jba &#x3D; static_cast&lt;jbyteArray&gt;(env-&gt;CallObjectMethod(string, getBytes)); &#x2F;&#x2F; 字符串转为数组</span><br><span class="line">    jbyteArray md5result &#x3D; static_cast&lt;jbyteArray&gt;(env-&gt;CallObjectMethod(md5, digest, jba)); &#x2F;&#x2F; 调用静态方法</span><br><span class="line"></span><br><span class="line">    char* cmd5 &#x3D; reinterpret_cast&lt;char *&gt;(env-&gt;GetByteArrayElements(md5result, 0));</span><br><span class="line">    int i;</span><br><span class="line">    char dest[32] &#x3D; &#123; 0 &#125;;</span><br><span class="line">    for (i &#x3D; 0; i &lt; 16; i++) &#123;</span><br><span class="line">        sprintf(dest + i * 2, &quot;%02x&quot;, (unsigned int) cmd5[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    return  env-&gt;NewStringUTF(dest);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="4-onCreate-native-化"><a href="#4-onCreate-native-化" class="headerlink" title="4.onCreate native 化"></a>4.onCreate native 化</h4><p>MainActivity.java<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@RequiresApi(api &#x3D; Build.VERSION_CODES.LOLLIPOP)</span><br><span class="line">@Override</span><br><span class="line">protected native void onCreate(Bundle savedInstanceState);</span><br><span class="line">&#96;&#96;&#96; </span><br><span class="line">native-lib.cpp</span><br></pre></td></tr></table></figure><br>extern “C”<br>JNIEXPORT void JNICALL<br>Java_com_jrb_easymd5_MainActivity_onCreate(JNIEnv *env, jobject thiz,<br>                                           jobject saved_instance_state) {<br>    // TODO: implement onCreate()<br>        //    super.onCreate(savedInstanceState);<br>        jclass  AppCompatActivity = env-&gt;FindClass(“androidx/appcompat/app/AppCompatActivity”);<br>        jmethodID  onCreate = env-&gt;GetMethodID(AppCompatActivity, “onCreate”, “(Landroid/os/Bundle;)V”);<br>        env-&gt;CallNonvirtualVoidMethod(thiz,AppCompatActivity,onCreate,saved_instance_state);<br>        //        setContentView(R.layout.activity_main);<br>        jmethodID setContentView = env-&gt;GetMethodID(AppCompatActivity,”setContentView”,”(I)V”);<br>        jclass Rlayout = env-&gt;FindClass(“com/jrb/easymd5/R$layout”);<br>        jfieldID activity_main = env-&gt;GetStaticFieldID(Rlayout,”activity_main”,”I”);<br>        jint activity_main_value = env-&gt;GetStaticIntField(Rlayout, activity_main);<br>        env-&gt;CallVoidMethod(thiz,setContentView,activity_main_value);</p>
+<p>//        TextView tv = findViewById(R.id.sample_text);<br>    jmethodID findViewById = env-&gt;GetMethodID(AppCompatActivity,”findViewById”,”(I)Landroid/view/View;”);<br>    jclass Rid = env-&gt;FindClass(“com/jrb/easymd5/R$id”);<br>    jfieldID sample_text = env-&gt;GetStaticFieldID(Rid,”sample_text”,”I”);<br>    jint sample_text_value = env-&gt;GetStaticIntField(Rid, sample_text);<br>    jobject  tv = env-&gt;CallObjectMethod(thiz,findViewById,sample_text_value);<br>//        tv.setText(“12345jrb!”);<br>    jclass TextView = env-&gt;FindClass(“android/widget/TextView”);<br>    jmethodID setText =  env-&gt;GetMethodID(TextView,”setText”,”(Ljava/lang/CharSequence;)V”);<br>    env-&gt;CallVoidMethod(tv, setText,env-&gt;NewStringUTF(“jrb!”));<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### objection 使用</span><br></pre></td></tr></table></figure><br>objection -g com.jrb.easymd5 explore<br>memory list modules // 查看so<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![ndk1](ndk1.png)</span><br></pre></td></tr></table></figure><br>memory list exports libnative-lib.so  //查看导出符号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">![ndk2](ndk2.png)</span><br><span class="line">&#96;&#96;&#96;shell script</span><br><span class="line">objdump -T libnative-lib.so  |grep fff</span><br></pre></td></tr></table></figure></p>
+<h4 id="函数的执行顺序"><a href="#函数的执行顺序" class="headerlink" title="函数的执行顺序"></a>函数的执行顺序</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. .init  .init_arrary , so feature   &#x3D; dlopen dlsym</span><br><span class="line">2. jni JNI_Onload    &#x3D; RegisterNatives</span><br><span class="line">3. so</span><br></pre></td></tr></table></figure>
+<h4 id="frida-hook-libart-hook-art-使用"><a href="#frida-hook-libart-hook-art-使用" class="headerlink" title="frida_hook_libart hook_art 使用"></a><a href="https://github.com/lasting-yang/frida_hook_libart" target="_blank" rel="noopener">frida_hook_libart</a> hook_art 使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">frida -U -f com.jrb.easymd5 -l hook_art.js</span><br><span class="line">&#x2F;&#x2F; so 调用栈 Backtracer.FUZZY 模糊  ACCURATE 详细</span><br><span class="line">&#x2F;&#x2F; console.log(&#39;CCCryptorCreate called from:\n&#39; + Thread.backtrace(this.context, Backtracer.FUZZY).map(DebugSymbol.fromAddress).join(&#39;\n&#39;) + &#39;\n&#39;);</span><br><span class="line">hook</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/04/NDK%E5%BC%80%E5%8F%91/ndk3.png" alt="ndk3"></p>
+<h4 id="frida-hook-libart-hook-RegisterNatives-使用"><a href="#frida-hook-libart-hook-RegisterNatives-使用" class="headerlink" title="frida_hook_libart hook_RegisterNatives 使用"></a><a href="https://github.com/lasting-yang/frida_hook_libart" target="_blank" rel="noopener">frida_hook_libart</a> hook_RegisterNatives 使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line">var ENV &#x3D; null;</span><br><span class="line">var JCLZ &#x3D; null;</span><br><span class="line"></span><br><span class="line">var method01addr &#x3D; null;</span><br><span class="line">var method02addr &#x3D; null;</span><br><span class="line">var method02 &#x3D; null;</span><br><span class="line"></span><br><span class="line">var addrNewStringUTF &#x3D; null;</span><br><span class="line"></span><br><span class="line">var NewStringUTF &#x3D; null;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function hook_RegisterNatives() &#123;</span><br><span class="line">    var symbols &#x3D; Module.enumerateSymbolsSync(&quot;libart.so&quot;);</span><br><span class="line">    var addrRegisterNatives &#x3D; null;</span><br><span class="line">    for (var i &#x3D; 0; i &lt; symbols.length; i++) &#123;</span><br><span class="line">        var symbol &#x3D; symbols[i];</span><br><span class="line">        </span><br><span class="line">        &#x2F;&#x2F;_ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi</span><br><span class="line">        if (symbol.name.indexOf(&quot;art&quot;) &gt;&#x3D; 0 &amp;&amp;</span><br><span class="line">                symbol.name.indexOf(&quot;JNI&quot;) &gt;&#x3D; 0 &amp;&amp; </span><br><span class="line">                symbol.name.indexOf(&quot;NewStringUTF&quot;) &gt;&#x3D; 0 &amp;&amp; </span><br><span class="line">                symbol.name.indexOf(&quot;CheckJNI&quot;) &lt; 0) &#123;</span><br><span class="line">            addrNewStringUTF &#x3D; symbol.address;</span><br><span class="line">            console.log(&quot;NewStringUTF is at &quot;, symbol.address, symbol.name);</span><br><span class="line">            NewStringUTF &#x3D; new NativeFunction(addrNewStringUTF,&#39;pointer&#39;,[&#39;pointer&#39;,&#39;pointer&#39;])</span><br><span class="line">        &#125;</span><br><span class="line">        if (symbol.name.indexOf(&quot;art&quot;) &gt;&#x3D; 0 &amp;&amp;</span><br><span class="line">                symbol.name.indexOf(&quot;JNI&quot;) &gt;&#x3D; 0 &amp;&amp; </span><br><span class="line">                symbol.name.indexOf(&quot;RegisterNatives&quot;) &gt;&#x3D; 0 &amp;&amp; </span><br><span class="line">                symbol.name.indexOf(&quot;CheckJNI&quot;) &lt; 0) &#123;</span><br><span class="line">            addrRegisterNatives &#x3D; symbol.address;</span><br><span class="line">            console.log(&quot;RegisterNatives is at &quot;, symbol.address, symbol.name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (addrRegisterNatives !&#x3D; null) &#123;</span><br><span class="line">        Interceptor.attach(addrRegisterNatives, &#123;</span><br><span class="line">            onEnter: function (args) &#123;</span><br><span class="line">                console.log(&quot;[RegisterNatives] method_count:&quot;, args[3]);</span><br><span class="line">                var env &#x3D; args[0];</span><br><span class="line">                ENV &#x3D; args[0];</span><br><span class="line">                var java_class &#x3D; args[1];</span><br><span class="line">                JCLZ &#x3D; args[1];</span><br><span class="line">                var class_name &#x3D; Java.vm.tryGetEnv().getClassName(java_class);</span><br><span class="line">                &#x2F;&#x2F;console.log(class_name);</span><br><span class="line"></span><br><span class="line">                var methods_ptr &#x3D; ptr(args[2]);</span><br><span class="line"></span><br><span class="line">                var method_count &#x3D; parseInt(args[3]);</span><br><span class="line">                for (var i &#x3D; 0; i &lt; method_count; i++) &#123;</span><br><span class="line">                    var name_ptr &#x3D; Memory.readPointer(methods_ptr.add(i * Process.pointerSize * 3));</span><br><span class="line">                    var sig_ptr &#x3D; Memory.readPointer(methods_ptr.add(i * Process.pointerSize * 3 + Process.pointerSize));</span><br><span class="line">                    var fnPtr_ptr &#x3D; Memory.readPointer(methods_ptr.add(i * Process.pointerSize * 3 + Process.pointerSize * 2));</span><br><span class="line"></span><br><span class="line">                    var name &#x3D; Memory.readCString(name_ptr);</span><br><span class="line">                    var sig &#x3D; Memory.readCString(sig_ptr);</span><br><span class="line">                    var find_module &#x3D; Process.findModuleByAddress(fnPtr_ptr);</span><br><span class="line">                    console.log(&quot;[RegisterNatives] java_class:&quot;, class_name, &quot;name:&quot;, name, &quot;sig:&quot;, sig, &quot;fnPtr:&quot;, fnPtr_ptr, &quot;module_name:&quot;, find_module.name, &quot;module_base:&quot;, find_module.base, &quot;offset:&quot;, ptr(fnPtr_ptr).sub(find_module.base));</span><br><span class="line">                    if(name.indexOf(&quot;method01&quot;)&gt;&#x3D;0)&#123;</span><br><span class="line">                        &#x2F;&#x2F; method01addr &#x3D; fnPtr_ptr;</span><br><span class="line">                        continue;</span><br><span class="line">                    &#125;else if (name.indexOf(&quot;decrypt&quot;)&gt;&#x3D;0)&#123;</span><br><span class="line">                        method02addr &#x3D; fnPtr_ptr;</span><br><span class="line">                        method02 &#x3D; new NativeFunction(method02addr,&#39;pointer&#39;,[&#39;pointer&#39;,&#39;pointer&#39;,&#39;pointer&#39;]);</span><br><span class="line">                        method01addr &#x3D; Module.findExportByName(&quot;libroysue.so&quot;, &quot;Java_com_roysue_easyso1_MainActivity_method01&quot;)</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                        continue;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function invokemethod01(contents)&#123;</span><br><span class="line">    </span><br><span class="line">    console.log(&quot;method01_addr is &#x3D;&gt;&quot;,method01addr)</span><br><span class="line">    var method01 &#x3D; new NativeFunction(method01addr,&#39;pointer&#39;,[&#39;pointer&#39;,&#39;pointer&#39;,&#39;pointer&#39;]);</span><br><span class="line">    var NewStringUTF &#x3D; new NativeFunction(addrNewStringUTF,&#39;pointer&#39;,[&#39;pointer&#39;,&#39;pointer&#39;])</span><br><span class="line">    var result &#x3D; null;</span><br><span class="line">    Java.perform(function()&#123;    </span><br><span class="line">        console.log(&quot;Java.vm.getEnv()&quot;,Java.vm.getEnv())</span><br><span class="line">        var JSTRING &#x3D; NewStringUTF(Java.vm.getEnv(),Memory.allocUtf8String(contents))</span><br><span class="line">        result &#x3D; method01(Java.vm.getEnv(),JSTRING,JSTRING);</span><br><span class="line">        console.log(&quot;result is &#x3D;&gt;&quot;,result)</span><br><span class="line">        console.log(&quot;result is &quot;,Java.vm.getEnv().getStringUtfChars(result, null).readCString())</span><br><span class="line">        result &#x3D; Java.vm.getEnv().getStringUtfChars(result, null).readCString();</span><br><span class="line"></span><br><span class="line">    &#125;)</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function invokemethod02(contents)&#123;</span><br><span class="line">    var result &#x3D; null;</span><br><span class="line">    Java.perform(function()&#123;    </span><br><span class="line">        var JSTRING &#x3D; NewStringUTF(Java.vm.getEnv(),Memory.allocUtf8String(contents))</span><br><span class="line">        result &#x3D; method02(Java.vm.getEnv(),JSTRING,JSTRING);</span><br><span class="line">        result &#x3D; Java.vm.getEnv().getStringUtfChars(result, null).readCString();</span><br><span class="line">    &#125;)</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="hook-dlopen"><a href="#hook-dlopen" class="headerlink" title="hook_dlopen"></a>hook_dlopen</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">var is_hook_libart &#x3D; false;</span><br><span class="line"></span><br><span class="line">function hook_dlopen() &#123;</span><br><span class="line">    Interceptor.attach(Module.findExportByName(null, &quot;dlopen&quot;), &#123;</span><br><span class="line">        onEnter: function(args) &#123;</span><br><span class="line">            var pathptr &#x3D; args[0];</span><br><span class="line">            if (pathptr !&#x3D;&#x3D; undefined &amp;&amp; pathptr !&#x3D; null) &#123;</span><br><span class="line">                var path &#x3D; ptr(pathptr).readCString();</span><br><span class="line">                console.log(&quot;dlopen:&quot;, path);</span><br><span class="line">                if (path.indexOf(&quot;libroysue.so&quot;) &gt;&#x3D; 0) &#123;</span><br><span class="line">                    this.can_hook_libart &#x3D; true;</span><br><span class="line">                    console.log(&quot;[dlopen:]&quot;, path);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        onLeave: function(retval) &#123;</span><br><span class="line">            if (this.can_hook_libart &amp;&amp; !is_hook_libart) &#123;                </span><br><span class="line">                is_hook_libart &#x3D; true;</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    Interceptor.attach(Module.findExportByName(null, &quot;android_dlopen_ext&quot;), &#123;</span><br><span class="line">        onEnter: function(args) &#123;</span><br><span class="line">            var pathptr &#x3D; args[0];</span><br><span class="line">            if (pathptr !&#x3D;&#x3D; undefined &amp;&amp; pathptr !&#x3D; null) &#123;</span><br><span class="line">                var path &#x3D; ptr(pathptr).readCString();</span><br><span class="line">                console.log(&quot;android_dlopen_ext:&quot;, path);</span><br><span class="line">                if (path.indexOf(&quot;libroysue.so&quot;) &gt;&#x3D; 0) &#123;</span><br><span class="line">                    this.can_hook_libart &#x3D; true;</span><br><span class="line">                    console.log(&quot;[android_dlopen_ext:]&quot;, path);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        onLeave: function(retval) &#123;</span><br><span class="line">            if (this.can_hook_libart &amp;&amp; !is_hook_libart) &#123;</span><br><span class="line">                is_hook_libart &#x3D; true;</span><br><span class="line">                var method01 &#x3D; Module.findExportByName(&quot;libroysue.so&quot;, &quot;Java_com_roysue_easyso1_MainActivity_method01&quot;)</span><br><span class="line">                var method02 &#x3D; Module.findExportByName(&quot;libroysue.so&quot;, &quot;_Z8method02P7_JNIEnvP7_jclassP8_jstring&quot;)</span><br><span class="line">                console.log(&quot;method01 address is &#x3D;&gt;&quot;,method01)</span><br><span class="line">                console.log(&quot;method02 address is &#x3D;&gt;&quot;,method02)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function main()&#123;</span><br><span class="line">    hook_dlopen()</span><br><span class="line">&#125;</span><br><span class="line">setImmediate(main)</span><br></pre></td></tr></table></figure>
+<h4 id="Simp1er-hook-RegisterNative"><a href="#Simp1er-hook-RegisterNative" class="headerlink" title="Simp1er hook_RegisterNative"></a><a href="https://github.com/Simp1er/AndroidSec/blob/master/hook_RegisterNative.js" target="_blank" rel="noopener">Simp1er hook_RegisterNative</a></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">仅在Android 8.1下测试成功，其他版本可能需要重新修改适配</span><br><span class="line">*&#x2F;</span><br><span class="line">const STD_STRING_SIZE &#x3D; 3 * Process.pointerSize;</span><br><span class="line">class StdString &#123;</span><br><span class="line">    constructor() &#123;</span><br><span class="line">        this.handle &#x3D; Memory.alloc(STD_STRING_SIZE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dispose() &#123;</span><br><span class="line">        const [data, isTiny] &#x3D; this._getData();</span><br><span class="line">        if (!isTiny) &#123;</span><br><span class="line">            Java.api.$delete(data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    disposeToString() &#123;</span><br><span class="line">        const result &#x3D; this.toString();</span><br><span class="line">        this.dispose();</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    toString() &#123;</span><br><span class="line">        const [data] &#x3D; this._getData();</span><br><span class="line">        return data.readUtf8String();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    _getData() &#123;</span><br><span class="line">        const str &#x3D; this.handle;</span><br><span class="line">        const isTiny &#x3D; (str.readU8() &amp; 1) &#x3D;&#x3D;&#x3D; 0;</span><br><span class="line">        const data &#x3D; isTiny ? str.add(1) : str.add(2 * Process.pointerSize).readPointer();</span><br><span class="line">        return [data, isTiny];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function prettyMethod(method_id, withSignature) &#123;</span><br><span class="line">    const result &#x3D; new StdString();</span><br><span class="line">    Java.api[&#39;art::ArtMethod::PrettyMethod&#39;](result, method_id, withSignature ? 1 : 0);</span><br><span class="line">    return result.disposeToString();</span><br><span class="line">&#125;</span><br><span class="line">function attach(addr) &#123;</span><br><span class="line">    Interceptor.attach(addr, &#123;</span><br><span class="line">        onEnter: function (args) &#123;</span><br><span class="line">            this.arg0 &#x3D; args[0]</span><br><span class="line">        &#125;, </span><br><span class="line">        onLeave: function (retval) &#123;</span><br><span class="line">            var modulemap &#x3D; new ModuleMap()</span><br><span class="line">            modulemap.update()</span><br><span class="line">            var module &#x3D; modulemap.find(retval)</span><br><span class="line">            var string &#x3D; Memory.alloc(0x100)</span><br><span class="line">            if (module !&#x3D; null) &#123;</span><br><span class="line">                console.log(&#39;&lt;&#39; + module.name + &#39;&gt; method_name &#x3D;&gt;&#39;,prettyMethod(this.arg0,1), &#39;,offset&#x3D;&gt;&#39;, ptr(retval).sub(module.base), &#39;,module_name&#x3D;&gt;&#39;, module.name)</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                console.log(&#39;&lt;anonymous&gt; method_name &#x3D;&gt;&#39;, readStdString(string), &#39;, addr &#x3D;&gt;&#39;, ptr(retval))</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">                if(readStdString(string).indexOf(&quot;method01&quot;)&gt;&#x3D;0)&#123;</span><br><span class="line">                    Interceptor.attach(ptr(retval),&#123;</span><br><span class="line">                        onEnter:function(args)&#123;</span><br><span class="line">                            console.log(&quot;entering method01&quot;,Java.vm.getEnv().getStringUtfChars(args[2], null).readCString())</span><br><span class="line">                        &#125;,onLeave:function()&#123;</span><br><span class="line">                            console.log(&quot;leaving method01&quot;)</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;)</span><br><span class="line">                &#125;;</span><br><span class="line">                            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function hook_RegisterNative() &#123;</span><br><span class="line">    var libart &#x3D; Process.findModuleByName(&#39;libart.so&#39;)</span><br><span class="line">    var symbols &#x3D; libart.enumerateSymbols()</span><br><span class="line">    for (var i &#x3D; 0; i &lt; symbols.length; i++) &#123;</span><br><span class="line">        if (symbols[i].name.indexOf(&#39;RegisterNative&#39;) &gt; -1 &amp;&amp; symbols[i].name.indexOf(&#39;ArtMethod&#39;) &gt; -1 &amp;&amp; symbols[i].name.indexOf(&#39;RuntimeCallbacks&#39;) &lt; 0) &#123;</span><br><span class="line">            attach(symbols[i].address)</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">function main() &#123;</span><br><span class="line">    hook_RegisterNative()</span><br><span class="line">&#125;</span><br><span class="line">setImmediate(main)</span><br></pre></td></tr></table></figure>
+<h4 id="jnitrace-trace"><a href="#jnitrace-trace" class="headerlink" title="jnitrace trace"></a><a href="https://github.com/chame1eon/jnitrace" target="_blank" rel="noopener">jnitrace</a> trace</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jnitrace -l libnative-lib.so com.jrb.easymd5</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/04/NDK%E5%BC%80%E5%8F%91/ndk4.png" alt="ndk4"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NDK/" rel="tag"># NDK</a>
+              <a href="/tags/JNI/" rel="tag"># JNI</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/04/%E9%9D%99%E6%80%81%E7%A1%ACpatch%20so%20binary%E8%BF%87%E5%8F%8D%E8%B0%83%E8%AF%95/" rel="prev" title="静态硬patch so binary过反调试">
+      <i class="fa fa-chevron-left"></i> 静态硬patch so binary过反调试
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#NDK-官方文档"><span class="nav-number">1.</span> <span class="nav-text">NDK 官方文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDK-JNI简书文章介绍"><span class="nav-number">2.</span> <span class="nav-text">NDK JNI简书文章介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDK-JNI-开发"><span class="nav-number">3.</span> <span class="nav-text">NDK JNI 开发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-静态注册"><span class="nav-number">3.1.</span> <span class="nav-text">1. 静态注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-动态注册-JNI-OnLoad-Native-化"><span class="nav-number">3.2.</span> <span class="nav-text">2. 动态注册 JNI_OnLoad Native 化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-native-调用java-方法"><span class="nav-number">3.3.</span> <span class="nav-text">3.native 调用java 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-onCreate-native-化"><span class="nav-number">3.4.</span> <span class="nav-text">4.onCreate native 化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数的执行顺序"><span class="nav-number">3.5.</span> <span class="nav-text">函数的执行顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#frida-hook-libart-hook-art-使用"><span class="nav-number">3.6.</span> <span class="nav-text">frida_hook_libart hook_art 使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#frida-hook-libart-hook-RegisterNatives-使用"><span class="nav-number">3.7.</span> <span class="nav-text">frida_hook_libart hook_RegisterNatives 使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hook-dlopen"><span class="nav-number">3.8.</span> <span class="nav-text">hook_dlopen</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Simp1er-hook-RegisterNative"><span class="nav-number">3.9.</span> <span class="nav-text">Simp1er hook_RegisterNative</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jnitrace-trace"><span class="nav-number">3.10.</span> <span class="nav-text">jnitrace trace</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="恰米"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">恰米</p>
+  <div class="site-description" itemprop="description">一个懒惰凡人的blog</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">恰米</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '731e8bc7f3f07273d605',
+      clientSecret: 'd5d63de17776046bc789e3edc66932a6bbc89424',
+      repo        : 'https://jinrb.github.io/index.html',
+      owner       : 'JinRongbin',
+      admin       : ['germey'],
+      id          : 'fe18c7113b276400fba952347b73f04c',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+    </div>
+</body>
+</html>
