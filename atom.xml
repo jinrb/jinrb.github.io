@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2022-04-06T13:59:46.000Z</updated>
+  <updated>2022-04-07T15:58:10.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Base64</title>
+    <link href="http://yoursite.com/2022/04/07/Base64/"/>
+    <id>http://yoursite.com/2022/04/07/Base64/</id>
+    <published>2022-04-07T15:30:00.000Z</published>
+    <updated>2022-04-07T15:58:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Base64"><a href="#Base64" class="headerlink" title="Base64"></a>Base64</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Base64的码表只有64个字符， 如果要表达64个字符的话，使用6的bit即可完全表示(2的6次方为64)。</span><br><span class="line">因为Base64的编码只有6个bit即可表示，而正常的字符是使用8个bit表示， 8和6的最小公倍数是24，所以4个Base64字符可以表示3个标准的ascll字符；</span><br><span class="line">如果是字符串转换为Base64码， 会先把对应的字符串转换为ascll码表对应的数字， 然后再把数字转换为2进制， 比如a的ascll码味97， 97的二进制是：01100001， 把8个二进制提取成6个，剩下的2个二进制和后面的二进制继续拼接， 最后再把6个二进制码转换为Base64对于的编</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">字符串      a       b        c</span><br><span class="line">ASCII      97      98       99</span><br><span class="line">8bit   01100001 01100010 01100011</span><br><span class="line">6bit   011000   010110   001001   100011</span><br><span class="line">十进制      24      22        9        35</span><br><span class="line">对应编码    Y        W        J        j</span><br></pre></td></tr></table></figure><p><img src="/2022/04/07/Base64/base64原理1.png" alt="base64原理1"><br><img src="/2022/04/07/Base64/base64原理1.png" alt="base64原理2"></p><h4 id="Android-Studio-实现简单base64的方法"><a href="#Android-Studio-实现简单base64的方法" class="headerlink" title="Android Studio 实现简单base64的方法"></a>Android Studio 实现简单base64的方法</h4><p>MainActivity.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jrb.base64;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Base64;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Used to load the 'native-lib' library on application startup.</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"native-lib"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        <span class="comment">// Example of a call to a native method</span></span><br><span class="line">        TextView tv = findViewById(R.id.sample_text);</span><br><span class="line">        <span class="comment">//String encode = Base64.encodeToString("A".getBytes(), Base64.DEFAULT);</span></span><br><span class="line">        tv.setText(base64enc(<span class="string">"jrbtest"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> String <span class="title">base64enc</span><span class="params">(String str)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>native-lib.cpp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;jni.h&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 码表</span><br><span class="line">static const char base64en[] &#x3D; &#123;&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;, &#39;H&#39;,  &#39;I&#39;, &#39;J&#39;, &#39;K&#39;, &#39;L&#39;, &#39;M&#39;, &#39;N&#39;, &#39;O&#39;, &#39;P&#39;,  &#39;Q&#39;, &#39;R&#39;, &#39;S&#39;, &#39;T&#39;, &#39;U&#39;, &#39;V&#39;, &#39;W&#39;, &#39;X&#39;,   &#39;Y&#39;, &#39;Z&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;,&#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;, &#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;,  &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;+&#39;, &#39;&#x2F;&#39;&#125;;</span><br><span class="line">static const char base64_pad &#x3D; &#39;&#x3D;&#39;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void base64_enc(const char *data, char *out)&#123;</span><br><span class="line">    &#x2F;&#x2F; data: jrb</span><br><span class="line">    &#x2F;&#x2F; base64 编码</span><br><span class="line">    int len_data &#x3D; strlen(data);</span><br><span class="line">    if (len_data &#x3D;&#x3D; 0)&#123;</span><br><span class="line">        out[0] &#x3D; &#39;\0&#39;;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    int index &#x3D; 0;</span><br><span class="line">    char last_c &#x3D; &#39;\0&#39;;</span><br><span class="line">    char c &#x3D; &#39;\0&#39;;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len_data; ++i) &#123;</span><br><span class="line">        c &#x3D; data[i];</span><br><span class="line">        switch (i % 3) &#123;</span><br><span class="line">            case 0:</span><br><span class="line">                out[index++] &#x3D; base64en[( c &gt;&gt; 2 ) &amp; 0x3f];  &#x2F;&#x2F;向右移2位</span><br><span class="line">                break;</span><br><span class="line">            case 1:</span><br><span class="line">                 out[index++] &#x3D; base64en[( ( last_c &amp; 0x3 ) &lt;&lt; 4 )| (( c &gt;&gt; 4 ) &amp; 0xf)];  &#x2F;</span><br><span class="line">                break;</span><br><span class="line">            case 2:</span><br><span class="line">                out[index++] &#x3D; base64en[ ( ( last_c &amp; 0xf ) &lt;&lt; 2 ) | ((c &gt;&gt; 6) &amp; 0x3) ];</span><br><span class="line">                out[index++] &#x3D; base64en[c &amp; 0x3f];</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">        last_c &#x3D; c;</span><br><span class="line">    &#125;</span><br><span class="line">    if (len_data % 3 &#x3D;&#x3D; 1)&#123;</span><br><span class="line">        out[index++] &#x3D; base64en[(c &amp; 0x3) &lt;&lt; 4];</span><br><span class="line">        out[index++] &#x3D; base64_pad;</span><br><span class="line">        out[index++] &#x3D; base64_pad;</span><br><span class="line">    &#125; else if(len_data % 3 &#x3D;&#x3D; 2)&#123;</span><br><span class="line">        out[index++] &#x3D; base64en[(c &amp; 0xf) &lt;&lt; 2];</span><br><span class="line">        out[index++] &#x3D; base64_pad;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extern &quot;C&quot;</span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_jrb_base64_MainActivity_base64enc(JNIEnv *env, jobject thiz, jstring str) &#123;</span><br><span class="line">    const char *data &#x3D; env-&gt;GetStringUTFChars(str,NULL);</span><br><span class="line">    char out[100] &#x3D; &#123;0&#125;;</span><br><span class="line">    base64_enc(data,out);</span><br><span class="line">    env-&gt;ReleaseStringUTFChars(str,data);</span><br><span class="line">    return env-&gt;NewStringUTF(out);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;Base64&quot;&gt;&lt;a href=&quot;#Base64&quot; class=&quot;headerlink&quot; title=&quot;Base64&quot;&gt;&lt;/a&gt;Base64&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gut
+      
+    
+    </summary>
+    
+    
+      <category term="密码学" scheme="http://yoursite.com/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
+    
+    
+      <category term="Base64" scheme="http://yoursite.com/tags/Base64/"/>
+    
+  </entry>
   
   <entry>
     <title>RC4</title>
@@ -27,9 +53,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;RC4&quot;&gt;&lt;a href=&quot;#RC4&quot; class=&quot;headerlink&quot; title=&quot;RC4&quot;&gt;&lt;/a&gt;RC4&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;RC4算法是一个可变密钥长度、面向字节操作的流密码。该算法以随机置换作为基础，其密码周期很可能大于10^100，且该算法的运行速度很快。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;RC4被用于为网络浏览器和服务器间通信而制定的SSL&amp;#x2F;TLS（安全套接字协议&amp;#x2F;传输层安全协议）标准中&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/04/06/RC4/rc4.png&quot; alt=&quot;rc411&quot;&gt;&lt;/p&gt;
-&lt;h4 id=&quot;rc4的详解&quot;&gt;&lt;a href=&quot;#rc4的详解&quot; class=&quot;headerlink&quot; title=&quot;rc4的详解&quot;&gt;&lt;/a&gt;rc4的详解&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1.S和T的初始状态：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	S中元素的值按升序被置为0-255，同时建立一个临时向量T。将密钥的值循环复制到T向量中。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　for (i &amp;#x3D; 0; i &amp;lt; 256; ++i) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	S[i] &amp;#x3D; i;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        	T[i] &amp;#x3D; K[i mod len];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2.S的初始置换：    用T产生S的初始置换&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　    j &amp;#x3D; 0;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　for (i &amp;#x3D; 0 ; i &amp;lt; 256 ; i++)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　j &amp;#x3D; (j + S[i] + T[i]) mod 256;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　swap(S[i] , S[j]);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3. 密钥流的生成：	    用T产生S的初始置换&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　i , j &amp;#x3D; 0;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　while (true)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　i &amp;#x3D; (i + 1) mod 256;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　j &amp;#x3D; (j + S[i]) mod 256;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　swap(S[i] , S[j]);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　t &amp;#x3D; (S[i] + S[j]) mod 256;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　　　k &amp;#x3D; S[t];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;　　&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;加密中，将k的值与明文的下一字节异或，解密时将k的值与密文的下一字节异或。&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      
+      
+        &lt;h3 id=&quot;RC4&quot;&gt;&lt;a href=&quot;#RC4&quot; class=&quot;headerlink&quot; title=&quot;RC4&quot;&gt;&lt;/a&gt;RC4&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;s
+      
     
     </summary>
     
@@ -52,9 +79,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;MD5介绍&quot;&gt;&lt;a href=&quot;#MD5介绍&quot; class=&quot;headerlink&quot; title=&quot;MD5介绍&quot;&gt;&lt;/a&gt;MD5介绍&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;MD5信息摘要算法（英语：MD5 Message-Digest Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致。&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;手算MD5&quot;&gt;&lt;a href=&quot;#手算MD5&quot; class=&quot;headerlink&quot; title=&quot;手算MD5&quot;&gt;&lt;/a&gt;手算MD5&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;输入：123456&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;输出：e10adc3949ba59abbe56e057f20f883e&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;流程图&lt;br&gt;&lt;img src=&quot;/2022/04/05/MD5/1.png&quot; alt=&quot;流程图&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;MD5介绍&quot;&gt;&lt;a href=&quot;#MD5介绍&quot; class=&quot;headerlink&quot; title=&quot;MD5介绍&quot;&gt;&lt;/a&gt;MD5介绍&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;
+      
     
     </summary>
     
@@ -77,7 +105,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;NDK-官方文档&quot;&gt;&lt;a href=&quot;#NDK-官方文档&quot; class=&quot;headerlink&quot; title=&quot;NDK 官方文档&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://developer.android.com/ndk/guides&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;NDK 官方文档&lt;/a&gt;&lt;/h3&gt;&lt;h3 id=&quot;NDK-JNI简书文章介绍&quot;&gt;&lt;a href=&quot;#NDK-JNI简书文章介绍&quot; class=&quot;headerlink&quot; title=&quot;NDK JNI简书文章介绍&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://www.jianshu.com/p/87ce6f565d37&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;NDK JNI简书文章介绍&lt;/a&gt;&lt;/h3&gt;&lt;h3 id=&quot;NDK-JNI-开发&quot;&gt;&lt;a href=&quot;#NDK-JNI-开发&quot; class=&quot;headerlink&quot; title=&quot;NDK JNI 开发&quot;&gt;&lt;/a&gt;NDK JNI 开发&lt;/h3&gt;&lt;h4 id=&quot;1-静态注册&quot;&gt;&lt;a href=&quot;#1-静态注册&quot; class=&quot;headerlink&quot; title=&quot;1. 静态注册&quot;&gt;&lt;/a&gt;1. 静态注册&lt;/h4&gt;&lt;p&gt;MainActivity.java&lt;br&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;NDK-官方文档&quot;&gt;&lt;a href=&quot;#NDK-官方文档&quot; class=&quot;headerlink&quot; title=&quot;NDK 官方文档&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://developer.android.com/ndk/guides&quot; target=&quot;_bl
+      
     
     </summary>
     
@@ -102,9 +133,11 @@
     
     <summary type="html">
     
-      &lt;p&gt;今天这个是看雪一个题目,里面在init() 中有frida反调试,frida开启 过段时间会闪跳&lt;/p&gt;
-&lt;h4 id=&quot;akptool-安装&quot;&gt;&lt;a href=&quot;#akptool-安装&quot; class=&quot;headerlink&quot; title=&quot;akptool 安装&quot;&gt;&lt;/a&gt;akptool 安装&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mv apktool.txt apktool&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;chmod 777 apktool*&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mv apktool* &amp;#x2F;usr&amp;#x2F;local&amp;#x2F;bin&amp;#x2F;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;jadx-静态分析&quot;&gt;&lt;a href=&quot;#jadx-静态分析&quot; class=&quot;headerlink&quot; title=&quot;jadx 静态分析&quot;&gt;&lt;/a&gt;jadx 静态分析&lt;/h4&gt;&lt;p&gt;jadx 打开so 是load 加载 native-lib , 7z x app 解压也只有一个64位的 libnative-lib.so&lt;/p&gt;
+      
+      
+        &lt;p&gt;今天这个是看雪一个题目,里面在init() 中有frida反调试,frida开启 过段时间会闪跳&lt;/p&gt;
+&lt;h4 id=&quot;akptool-安装&quot;&gt;&lt;a href=&quot;#akptool-安装&quot; class=&quot;headerlink&quot; title=&quot;akptool 安装&quot;&gt;&lt;/a&gt;
+      
     
     </summary>
     
@@ -127,9 +160,10 @@
     
     <summary type="html">
     
-      &lt;h4 id=&quot;抓包-charles-SagerNet&quot;&gt;&lt;a href=&quot;#抓包-charles-SagerNet&quot; class=&quot;headerlink&quot; title=&quot;抓包 charles + SagerNet&quot;&gt;&lt;/a&gt;抓包 charles + SagerNet&lt;/h4&gt;&lt;p&gt;&lt;img src=&quot;/2022/03/31/JDDJ/1.png&quot; alt=&quot;抓包&quot;&gt;&lt;/p&gt;
-&lt;h4 id=&quot;jadx-静态分析&quot;&gt;&lt;a href=&quot;#jadx-静态分析&quot; class=&quot;headerlink&quot; title=&quot;jadx 静态分析&quot;&gt;&lt;/a&gt;jadx 静态分析&lt;/h4&gt;&lt;p&gt;搜索 “djencrypt”  很幸运就一个结果&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/31/JDDJ/2.png&quot; alt=&quot;jadx搜索&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h4 id=&quot;抓包-charles-SagerNet&quot;&gt;&lt;a href=&quot;#抓包-charles-SagerNet&quot; class=&quot;headerlink&quot; title=&quot;抓包 charles + SagerNet&quot;&gt;&lt;/a&gt;抓包 charles + SagerNet&lt;/h4&gt;&lt;
+      
     
     </summary>
     
@@ -152,19 +186,10 @@
     
     <summary type="html">
     
-      &lt;h4 id=&quot;官网Api&quot;&gt;&lt;a href=&quot;#官网Api&quot; class=&quot;headerlink&quot; title=&quot;官网Api&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://api.xposed.info/reference/packages.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官网Api&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;新手入门文章&quot;&gt;&lt;a href=&quot;#新手入门文章&quot; class=&quot;headerlink&quot; title=&quot;新手入门文章&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://www.freebuf.com/articles/terminal/189021.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;新手入门文章&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;xposed-创建&quot;&gt;&lt;a href=&quot;#xposed-创建&quot; class=&quot;headerlink&quot; title=&quot;xposed 创建&quot;&gt;&lt;/a&gt;xposed 创建&lt;/h4&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;在/app/src/main/AndroidManifest.xml 添加&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;meta-data&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:name&amp;#x3D;&amp;quot;xposedmodule&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:value&amp;#x3D;&amp;quot;true&amp;quot; &amp;#x2F;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;meta-data&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:name&amp;#x3D;&amp;quot;xposeddescription&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:value&amp;#x3D;&amp;quot;这是一个Xposed例程&amp;quot; &amp;#x2F;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;lt;meta-data&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:name&amp;#x3D;&amp;quot;xposedminversion&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    android:value&amp;#x3D;&amp;quot;53&amp;quot; &amp;#x2F;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;/app/src、build.gradle 添加&lt;/p&gt;
- &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;repositories &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    jcenter()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;dependencies &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    compileOnly &amp;#39;de.robv.android.xposed:api:82&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    compileOnly &amp;#39;de.robv.android.xposed:api:82:sources&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    implementation &amp;#39;androidx.appcompat:appcompat:1.1.0&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    implementation &amp;#39;com.google.android.material:material:1.1.0&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    implementation &amp;#39;androidx.constraintlayout:constraintlayout:1.1.3&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    testImplementation &amp;#39;junit:junit:4.+&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    androidTestImplementation &amp;#39;androidx.test.ext:junit:1.1.1&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    androidTestImplementation &amp;#39;androidx.test.espresso:espresso-core:3.2.0&amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;编写hook代码 HookTest.java&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;右键点击 “main ” 文件夹 ， 选择new —&amp;gt; Folder —&amp;gt;Assets Folder，新建assets 文件夹 在建xposed_init文件，里面填写hook脚本文件路径&lt;br&gt;  &lt;img src=&quot;/2022/03/30/Xposed/img.png&quot; alt=&quot;img.png&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&quot;hook-构造函数&quot;&gt;&lt;a href=&quot;#hook-构造函数&quot; class=&quot;headerlink&quot; title=&quot;hook 构造函数&quot;&gt;&lt;/a&gt;hook 构造函数&lt;/h4&gt;
+      
+      
+        &lt;h4 id=&quot;官网Api&quot;&gt;&lt;a href=&quot;#官网Api&quot; class=&quot;headerlink&quot; title=&quot;官网Api&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://api.xposed.info/reference/packages.html&quot; target=&quot;_blan
+      
     
     </summary>
     
@@ -187,9 +212,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Android逆向之某狗signature&quot;&gt;&lt;a href=&quot;#Android逆向之某狗signature&quot; class=&quot;headerlink&quot; title=&quot;Android逆向之某狗signature&quot;&gt;&lt;/a&gt;Android逆向之某狗signature&lt;/h3&gt;&lt;h4 id=&quot;抓包-charles-vpn&quot;&gt;&lt;a href=&quot;#抓包-charles-vpn&quot; class=&quot;headerlink&quot; title=&quot;抓包 charles + vpn&quot;&gt;&lt;/a&gt;抓包 charles + vpn&lt;/h4&gt;&lt;p&gt;app version 11.1.4&lt;/p&gt;
-&lt;p&gt;今天我们分析一个简单的app的signature,首先先抓包&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/29/kugou/1.png&quot; alt=&quot;抓包&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;Android逆向之某狗signature&quot;&gt;&lt;a href=&quot;#Android逆向之某狗signature&quot; class=&quot;headerlink&quot; title=&quot;Android逆向之某狗signature&quot;&gt;&lt;/a&gt;Android逆向之某狗signature&lt;/
+      
     
     </summary>
     
@@ -212,8 +238,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;刷机：&quot;&gt;&lt;a href=&quot;#刷机：&quot; class=&quot;headerlink&quot; title=&quot;刷机：&quot;&gt;&lt;/a&gt;刷机：&lt;/h3&gt;&lt;p&gt;1.在 &lt;a href=&quot;https://developers.google.com/android/images&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;谷歌官方工厂镜像网站&lt;/a&gt; 下载对应手机型号和版本的安装包&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/27/%E5%88%B7%E6%9C%BA/1.png&quot; alt=&quot;谷歌官方工厂镜像网站&quot;&gt;&lt;br&gt;&lt;/p&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget https:&amp;#x2F;&amp;#x2F;dl.google.com&amp;#x2F;dl&amp;#x2F;android&amp;#x2F;aosp&amp;#x2F;bullhead-n2g47o-factory-3ff32f55.zip&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7z x  bullhead-n2g47o-factory-3ff32f55.zip&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;p&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;刷机：&quot;&gt;&lt;a href=&quot;#刷机：&quot; class=&quot;headerlink&quot; title=&quot;刷机：&quot;&gt;&lt;/a&gt;刷机：&lt;/h3&gt;&lt;p&gt;1.在 &lt;a href=&quot;https://developers.google.com/android/images&quot; target=
+      
     
     </summary>
     
@@ -236,9 +264,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;frida-kali环境配置&quot;&gt;&lt;a href=&quot;#frida-kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;frida,kali环境配置&quot;&gt;&lt;/a&gt;frida,kali环境配置&lt;/h3&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a href=&quot;https://pan.baidu.com/s/1dPIe5FzZLQzSLMsMcGZUrg&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;百度云盘&lt;/a&gt;  提取码：50jw &lt;/p&gt;
-&lt;h4 id=&quot;1-切换root登录&quot;&gt;&lt;a href=&quot;#1-切换root登录&quot; class=&quot;headerlink&quot; title=&quot;1.切换root登录&quot;&gt;&lt;/a&gt;1.切换root登录&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;第一次登录利用 kali  kali&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;在Terminal输入 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    sudo passwd root&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    password for kali: kali&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    New password: toor&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    Retype new password: toor&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;出现passwd: password updated successfully表示成功&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;重启虚拟机就可以 root toor 登录&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;退回bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;chsh -s &amp;#x2F;bin&amp;#x2F;bash&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;reboot&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;2-kali的一些修复操作&quot;&gt;&lt;a href=&quot;#2-kali的一些修复操作&quot; class=&quot;headerlink&quot; title=&quot;2.kali的一些修复操作&quot;&gt;&lt;/a&gt;2.kali的一些修复操作&lt;/h4&gt;
+      
+      
+        &lt;h3 id=&quot;frida-kali环境配置&quot;&gt;&lt;a href=&quot;#frida-kali环境配置&quot; class=&quot;headerlink&quot; title=&quot;frida,kali环境配置&quot;&gt;&lt;/a&gt;frida,kali环境配置&lt;/h3&gt;&lt;p&gt;kali-linux-2021-1的地址&lt;a
+      
     
     </summary>
     
@@ -261,8 +290,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;adb命令大全&quot;&gt;&lt;a href=&quot;#adb命令大全&quot; class=&quot;headerlink&quot; title=&quot;adb命令大全&quot;&gt;&lt;/a&gt;adb命令大全&lt;/h3&gt;&lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class=&quot;headerlink&quot; title=&quot;1、查询已连接设备/模拟器&quot;&gt;&lt;/a&gt;1、查询已连接设备/模拟器&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb devices&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h5 id=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;a href=&quot;#2、指定设备获取屏幕分辨率&quot; class=&quot;headerlink&quot; title=&quot;2、指定设备获取屏幕分辨率&quot;&gt;&lt;/a&gt;2、指定设备获取屏幕分辨率&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;adb -s 设备号 shell wm size&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      
+      
+        &lt;h3 id=&quot;adb命令大全&quot;&gt;&lt;a href=&quot;#adb命令大全&quot; class=&quot;headerlink&quot; title=&quot;adb命令大全&quot;&gt;&lt;/a&gt;adb命令大全&lt;/h3&gt;&lt;h5 id=&quot;1、查询已连接设备-模拟器&quot;&gt;&lt;a href=&quot;#1、查询已连接设备-模拟器&quot; class
+      
     
     </summary>
     
@@ -283,9 +314,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;objection&quot;&gt;&lt;a href=&quot;#objection&quot; class=&quot;headerlink&quot; title=&quot;objection&quot;&gt;&lt;/a&gt;objection&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Frida只是提供了各种API供我们调用，在此基础之上可以实现具体的功能，比如禁用证书绑定之类的脚本，就是使用Frida的各种API来组合编写而成。于是有大佬将各种常见、常用的功能整合进一个工具，供我们直接在命令行中使用，这个工具便是objection。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;objection功能强大，命令众多，而且不用写一行代码，便可实现诸如内存搜索、类和模块搜索、方法hook打印参数返回值调用栈等常用功能，是一个非常方便的，逆向必备、内存漫游神器&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h4 id=&quot;1-开启非标准端口frida&quot;&gt;&lt;a href=&quot;#1-开启非标准端口frida&quot; class=&quot;headerlink&quot; title=&quot;1.开启非标准端口frida&quot;&gt;&lt;/a&gt;1.开启非标准端口frida&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;.&amp;#x2F;fs -l 0.0.0.0:8888&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/23/objection/frida01.png&quot; alt=&quot;frida特殊端口&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;objection&quot;&gt;&lt;a href=&quot;#objection&quot; class=&quot;headerlink&quot; title=&quot;objection&quot;&gt;&lt;/a&gt;objection&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;t
+      
     
     </summary>
     
@@ -308,9 +340,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;六层锁机&quot;&gt;&lt;a href=&quot;#六层锁机&quot; class=&quot;headerlink&quot; title=&quot;六层锁机&quot;&gt;&lt;/a&gt;六层锁机&lt;/h3&gt;&lt;h4 id=&quot;登录页&quot;&gt;&lt;a href=&quot;#登录页&quot; class=&quot;headerlink&quot; title=&quot;登录页&quot;&gt;&lt;/a&gt;登录页&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;打开app, 随意输入登录，根据页面提示 利用jadx搜索Login failed&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/23/frida_hook_java/6login.png&quot; alt=&quot;jadx 搜索&quot;&gt;&lt;br&gt;&lt;img src=&quot;/2022/03/23/frida_hook_java/6_login.png&quot; alt=&quot;登录代码&quot;&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;静态分析jadx反编译代码  主要 需要com.example.androiddemo.Activity.LoginActivity.a 方法和 密码相同&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;下面 编写 frida 脚本 主动调用java函数 打印结果&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      
+      
+        &lt;h3 id=&quot;六层锁机&quot;&gt;&lt;a href=&quot;#六层锁机&quot; class=&quot;headerlink&quot; title=&quot;六层锁机&quot;&gt;&lt;/a&gt;六层锁机&lt;/h3&gt;&lt;h4 id=&quot;登录页&quot;&gt;&lt;a href=&quot;#登录页&quot; class=&quot;headerlink&quot; title=&quot;登录页&quot;&gt;&lt;/a&gt;登录
+      
     
     </summary>
     
@@ -333,9 +366,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;基本信息&quot;&gt;&lt;a href=&quot;#基本信息&quot; class=&quot;headerlink&quot; title=&quot;基本信息&quot;&gt;&lt;/a&gt;基本信息&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;app version: 4.69.5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;手机: Piexl3 XL  Android 10 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;抓包: charles + SagerNet&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;用到的工具: jadx, frida, ida&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1.利用 charles + SagerNet, 抓详商品详情页的包，很明显 newSign就是我们要分析的参数&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/03/21/dewu/img.png&quot; alt=&quot;抓包&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;基本信息&quot;&gt;&lt;a href=&quot;#基本信息&quot; class=&quot;headerlink&quot; title=&quot;基本信息&quot;&gt;&lt;/a&gt;基本信息&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr
+      
     
     </summary>
     
@@ -358,8 +392,10 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Auto-js结合-Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;a href=&quot;#Auto-js结合-Mimtproxy爬取抖音店铺数据&quot; class=&quot;headerlink&quot; title=&quot;Auto.js结合 Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;/a&gt;Auto.js结合 Mimtproxy爬取抖音店铺数据&lt;/h3&gt;&lt;h4 id=&quot;软件的安装&quot;&gt;&lt;a href=&quot;#软件的安装&quot; class=&quot;headerlink&quot; title=&quot;软件的安装&quot;&gt;&lt;/a&gt;软件的安装&lt;/h4&gt;&lt;h5 id=&quot;1-Auto-js&quot;&gt;&lt;a href=&quot;#1-Auto-js&quot; class=&quot;headerlink&quot; title=&quot;1.Auto.js&quot;&gt;&lt;/a&gt;1.Auto.js&lt;/h5&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Auto.js是Android上支持Node.js的JavaScript自动化和编程软件。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;由于auto.js被大量用于黑产目前作者，不支持，不维护免费版。只有维护付费版Auto.js Pro。&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;1.模拟器安装是AutoJs4.1.0.apk免费版&lt;br&gt;auto.js 安装时开启无障碍服务&lt;br&gt;&lt;img src=&quot;/2022/03/20/Autojs/img.png&quot; alt=&quot;img.png&quot;&gt;&lt;br&gt;可以设置 按音量向上建停止代码，防止写无限循环推不出来&lt;br&gt;2.电脑端安装vscode&lt;br&gt;安装auto.js插件，输入如hyb1996，将两个插件进行安装&lt;br&gt;&lt;img src=&quot;/2022/03/20/Autojs/img_3.png&quot; alt=&quot;安装插件&quot;&gt;&lt;/p&gt;
+      
+      
+        &lt;h3 id=&quot;Auto-js结合-Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;a href=&quot;#Auto-js结合-Mimtproxy爬取抖音店铺数据&quot; class=&quot;headerlink&quot; title=&quot;Auto.js结合 Mimtproxy爬取抖音店铺数据&quot;&gt;&lt;/a&gt;Auto.
+      
     
     </summary>
     
@@ -382,9 +418,11 @@
     
     <summary type="html">
     
-      &lt;p&gt;记录一些安卓抓包的工具&lt;/p&gt;
-&lt;h3 id=&quot;一-Charles-抓包&quot;&gt;&lt;a href=&quot;#一-Charles-抓包&quot; class=&quot;headerlink&quot; title=&quot;一. Charles 抓包&quot;&gt;&lt;/a&gt;一. Charles 抓包&lt;/h3&gt;&lt;h4 id=&quot;1-charles-设置&quot;&gt;&lt;a href=&quot;#1-charles-设置&quot; class=&quot;headerlink&quot; title=&quot;1.charles 设置&quot;&gt;&lt;/a&gt;1.charles 设置&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://www.charlesproxy.com/download/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;charles安装网址&lt;/a&gt;&lt;/p&gt;
-&lt;h5 id=&quot;proxy-—-gt-ssl-proxying-settings-—-gt-add-—-gt-设置&quot;&gt;&lt;a href=&quot;#proxy-—-gt-ssl-proxying-settings-—-gt-add-—-gt-设置&quot; class=&quot;headerlink&quot; title=&quot;proxy —&amp;gt; ssl proxying settings —&amp;gt; add —&amp;gt; 设置 &quot;&gt;&lt;/a&gt;proxy —&amp;gt; ssl proxying settings —&amp;gt; add —&amp;gt; 设置&lt;em&gt; &lt;/em&gt;&lt;/h5&gt;
+      
+      
+        &lt;p&gt;记录一些安卓抓包的工具&lt;/p&gt;
+&lt;h3 id=&quot;一-Charles-抓包&quot;&gt;&lt;a href=&quot;#一-Charles-抓包&quot; class=&quot;headerlink&quot; title=&quot;一. Charles 抓包&quot;&gt;&lt;/a&gt;一. Charles 抓包&lt;/h3&gt;&lt;h4 id=&quot;1-ch
+      
     
     </summary>
     

@@ -20,22 +20,23 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="RC412RC4算法是一个可变密钥长度、面向字节操作的流密码。该算法以随机置换作为基础，其密码周期很可能大于10^100，且该算法的运行速度很快。RC4被用于为网络浏览器和服务器间通信而制定的SSL&#x2F;TLS（安全套接字协议&#x2F;传输层安全协议）标准中  rc4的详解1234567891011121314151617181920212223241.S和T的初始状态：	S中元素的值按升">
+  <meta name="description" content="Base64123Base64的码表只有64个字符， 如果要表达64个字符的话，使用6的bit即可完全表示(2的6次方为64)。因为Base64的编码只有6个bit即可表示，而正常的字符是使用8个bit表示， 8和6的最小公倍数是24，所以4个Base64字符可以表示3个标准的ascll字符；如果是字符串转换为Base64码， 会先把对应的字符串转换为ascll码表对应的数字， 然后再把数字转换为">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RC4">
-<meta property="og:url" content="http://yoursite.com/2022/04/06/RC4/index.html">
+<meta property="og:title" content="Base64">
+<meta property="og:url" content="http://yoursite.com/2022/04/07/Base64/index.html">
 <meta property="og:site_name" content="凡人逆向">
-<meta property="og:description" content="RC412RC4算法是一个可变密钥长度、面向字节操作的流密码。该算法以随机置换作为基础，其密码周期很可能大于10^100，且该算法的运行速度很快。RC4被用于为网络浏览器和服务器间通信而制定的SSL&#x2F;TLS（安全套接字协议&#x2F;传输层安全协议）标准中  rc4的详解1234567891011121314151617181920212223241.S和T的初始状态：	S中元素的值按升">
+<meta property="og:description" content="Base64123Base64的码表只有64个字符， 如果要表达64个字符的话，使用6的bit即可完全表示(2的6次方为64)。因为Base64的编码只有6个bit即可表示，而正常的字符是使用8个bit表示， 8和6的最小公倍数是24，所以4个Base64字符可以表示3个标准的ascll字符；如果是字符串转换为Base64码， 会先把对应的字符串转换为ascll码表对应的数字， 然后再把数字转换为">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2022/04/06/RC4/rc4.png">
-<meta property="article:published_time" content="2022-04-06T13:30:00.000Z">
-<meta property="article:modified_time" content="2022-04-06T13:59:46.000Z">
+<meta property="og:image" content="http://yoursite.com/2022/04/07/Base64/base64%E5%8E%9F%E7%90%861.png">
+<meta property="og:image" content="http://yoursite.com/2022/04/07/Base64/base64%E5%8E%9F%E7%90%861.png">
+<meta property="article:published_time" content="2022-04-07T15:30:00.000Z">
+<meta property="article:modified_time" content="2022-04-07T15:58:10.000Z">
 <meta property="article:author" content="恰米">
-<meta property="article:tag" content="RC4">
+<meta property="article:tag" content="Base64">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2022/04/06/RC4/rc4.png">
+<meta name="twitter:image" content="http://yoursite.com/2022/04/07/Base64/base64%E5%8E%9F%E7%90%861.png">
 
-<link rel="canonical" href="http://yoursite.com/2022/04/06/RC4/">
+<link rel="canonical" href="http://yoursite.com/2022/04/07/Base64/">
 
 
 <script id="page-configurations">
@@ -48,7 +49,7 @@
   };
 </script>
 
-  <title>RC4 | 凡人逆向</title>
+  <title>Base64 | 凡人逆向</title>
   
 
 
@@ -196,7 +197,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/04/06/RC4/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/04/07/Base64/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -209,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          RC4
+          Base64
         </h1>
 
         <div class="post-meta">
@@ -220,7 +221,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-04-06 21:30:00 / 修改时间：21:59:46" itemprop="dateCreated datePublished" datetime="2022-04-06T21:30:00+08:00">2022-04-06</time>
+              <time title="创建时间：2022-04-07 23:30:00 / 修改时间：23:58:10" itemprop="dateCreated datePublished" datetime="2022-04-07T23:30:00+08:00">2022-04-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -243,10 +244,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="RC4"><a href="#RC4" class="headerlink" title="RC4"></a>RC4</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RC4算法是一个可变密钥长度、面向字节操作的流密码。该算法以随机置换作为基础，其密码周期很可能大于10^100，且该算法的运行速度很快。</span><br><span class="line">RC4被用于为网络浏览器和服务器间通信而制定的SSL&#x2F;TLS（安全套接字协议&#x2F;传输层安全协议）标准中</span><br></pre></td></tr></table></figure>
-<p><img src="/2022/04/06/RC4/rc4.png" alt="rc411"></p>
-<h4 id="rc4的详解"><a href="#rc4的详解" class="headerlink" title="rc4的详解"></a>rc4的详解</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">1.S和T的初始状态：</span><br><span class="line">	S中元素的值按升序被置为0-255，同时建立一个临时向量T。将密钥的值循环复制到T向量中。</span><br><span class="line">　　for (i &#x3D; 0; i &lt; 256; ++i) &#123;</span><br><span class="line">        	S[i] &#x3D; i;</span><br><span class="line">        	T[i] &#x3D; K[i mod len];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">2.S的初始置换：    用T产生S的初始置换</span><br><span class="line">　    j &#x3D; 0;</span><br><span class="line">　　for (i &#x3D; 0 ; i &lt; 256 ; i++)&#123;</span><br><span class="line">　　　　j &#x3D; (j + S[i] + T[i]) mod 256;</span><br><span class="line">　　　　swap(S[i] , S[j]);</span><br><span class="line">　　&#125;</span><br><span class="line"></span><br><span class="line">3. 密钥流的生成：	    用T产生S的初始置换</span><br><span class="line">　　i , j &#x3D; 0;</span><br><span class="line">　　while (true)&#123;</span><br><span class="line">　　　　i &#x3D; (i + 1) mod 256;</span><br><span class="line">　　　　j &#x3D; (j + S[i]) mod 256;</span><br><span class="line">　　　　swap(S[i] , S[j]);</span><br><span class="line">　　　　t &#x3D; (S[i] + S[j]) mod 256;</span><br><span class="line">　　　　k &#x3D; S[t];</span><br><span class="line">　　&#125;</span><br><span class="line">加密中，将k的值与明文的下一字节异或，解密时将k的值与密文的下一字节异或。</span><br></pre></td></tr></table></figure>
-<h4 id="Android-Studio-实现"><a href="#Android-Studio-实现" class="headerlink" title="Android Studio 实现"></a>Android Studio 实现</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">void rc4_init(unsigned char *S, char *K, int len)&#123;</span><br><span class="line">    char T[256] &#x3D; &#123;0&#125;;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; 256; ++i) &#123;</span><br><span class="line">        S[i] &#x3D; i;</span><br><span class="line">        T[i] &#x3D; K[i % len];</span><br><span class="line">    &#125;</span><br><span class="line">    int j &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; 256; ++i) &#123;</span><br><span class="line">        j &#x3D; (j + S[i] + T[i]) % 256;</span><br><span class="line">        swap(S[i],S[j]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void rc4_enc(unsigned char *S, char *content, int len)&#123;</span><br><span class="line">   int i &#x3D; 0, j &#x3D; 0, t &#x3D; 0;</span><br><span class="line">    for (int k &#x3D; 0; k &lt; len; ++k) &#123;</span><br><span class="line">        i &#x3D; (i + 1) % 256;</span><br><span class="line">        j &#x3D; (j + S[i]) % 256;</span><br><span class="line">        swap(S[i] , S[j]);</span><br><span class="line">        t &#x3D; (S[i] + S[j]) % 256;</span><br><span class="line">        content[k] ^&#x3D; S[t];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">extern &quot;C&quot;</span><br><span class="line">JNIEXPORT void JNICALL</span><br><span class="line">Java_com_kanxue_rc4_MainActivity_rc4_1enc(JNIEnv *env, jobject thiz, jbyteArray data) &#123;</span><br><span class="line">    jbyte *j_byte_data &#x3D; env-&gt;GetByteArrayElements(data,0);</span><br><span class="line">    char *content &#x3D; reinterpret_cast&lt;char *&gt;(j_byte_data);</span><br><span class="line">    env-&gt;ReleaseByteArrayElements(data,j_byte_data,0);</span><br><span class="line">    unsigned char S[256];</span><br><span class="line">    char *K &#x3D; &quot;12345&quot;;</span><br><span class="line">    rc4_init(S,K,5);</span><br><span class="line">    rc4_enc(S,content,strlen(content));</span><br><span class="line">    __android_log_print(ANDROID_LOG_INFO,&quot;jrb&#x3D;&#x3D;&gt;&quot;,&quot;rc4_enc: %s&quot;,content);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h3 id="Base64"><a href="#Base64" class="headerlink" title="Base64"></a>Base64</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Base64的码表只有64个字符， 如果要表达64个字符的话，使用6的bit即可完全表示(2的6次方为64)。</span><br><span class="line">因为Base64的编码只有6个bit即可表示，而正常的字符是使用8个bit表示， 8和6的最小公倍数是24，所以4个Base64字符可以表示3个标准的ascll字符；</span><br><span class="line">如果是字符串转换为Base64码， 会先把对应的字符串转换为ascll码表对应的数字， 然后再把数字转换为2进制， 比如a的ascll码味97， 97的二进制是：01100001， 把8个二进制提取成6个，剩下的2个二进制和后面的二进制继续拼接， 最后再把6个二进制码转换为Base64对于的编</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">字符串      a       b        c</span><br><span class="line">ASCII      97      98       99</span><br><span class="line">8bit   01100001 01100010 01100011</span><br><span class="line">6bit   011000   010110   001001   100011</span><br><span class="line">十进制      24      22        9        35</span><br><span class="line">对应编码    Y        W        J        j</span><br></pre></td></tr></table></figure>
+<p><img src="/2022/04/07/Base64/base64原理1.png" alt="base64原理1"><br><img src="/2022/04/07/Base64/base64原理1.png" alt="base64原理2"></p>
+<h4 id="Android-Studio-实现简单base64的方法"><a href="#Android-Studio-实现简单base64的方法" class="headerlink" title="Android Studio 实现简单base64的方法"></a>Android Studio 实现简单base64的方法</h4><p>MainActivity.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jrb.base64;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> androidx.appcompat.app.AppCompatActivity;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.util.Base64;</span><br><span class="line"><span class="keyword">import</span> android.widget.TextView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Used to load the 'native-lib' library on application startup.</span></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"native-lib"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        <span class="comment">// Example of a call to a native method</span></span><br><span class="line">        TextView tv = findViewById(R.id.sample_text);</span><br><span class="line">        <span class="comment">//String encode = Base64.encodeToString("A".getBytes(), Base64.DEFAULT);</span></span><br><span class="line">        tv.setText(base64enc(<span class="string">"jrbtest"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">native</span> String <span class="title">base64enc</span><span class="params">(String str)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>native-lib.cpp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;jni.h&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 码表</span><br><span class="line">static const char base64en[] &#x3D; &#123;&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;, &#39;H&#39;,  &#39;I&#39;, &#39;J&#39;, &#39;K&#39;, &#39;L&#39;, &#39;M&#39;, &#39;N&#39;, &#39;O&#39;, &#39;P&#39;,  &#39;Q&#39;, &#39;R&#39;, &#39;S&#39;, &#39;T&#39;, &#39;U&#39;, &#39;V&#39;, &#39;W&#39;, &#39;X&#39;,   &#39;Y&#39;, &#39;Z&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;,&#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;, &#39;n&#39;, &#39;o&#39;, &#39;p&#39;, &#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;,  &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;, &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;+&#39;, &#39;&#x2F;&#39;&#125;;</span><br><span class="line">static const char base64_pad &#x3D; &#39;&#x3D;&#39;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void base64_enc(const char *data, char *out)&#123;</span><br><span class="line">    &#x2F;&#x2F; data: jrb</span><br><span class="line">    &#x2F;&#x2F; base64 编码</span><br><span class="line">    int len_data &#x3D; strlen(data);</span><br><span class="line">    if (len_data &#x3D;&#x3D; 0)&#123;</span><br><span class="line">        out[0] &#x3D; &#39;\0&#39;;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    int index &#x3D; 0;</span><br><span class="line">    char last_c &#x3D; &#39;\0&#39;;</span><br><span class="line">    char c &#x3D; &#39;\0&#39;;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len_data; ++i) &#123;</span><br><span class="line">        c &#x3D; data[i];</span><br><span class="line">        switch (i % 3) &#123;</span><br><span class="line">            case 0:</span><br><span class="line">                out[index++] &#x3D; base64en[( c &gt;&gt; 2 ) &amp; 0x3f];  &#x2F;&#x2F;向右移2位</span><br><span class="line">                break;</span><br><span class="line">            case 1:</span><br><span class="line">                 out[index++] &#x3D; base64en[( ( last_c &amp; 0x3 ) &lt;&lt; 4 )| (( c &gt;&gt; 4 ) &amp; 0xf)];  &#x2F;</span><br><span class="line">                break;</span><br><span class="line">            case 2:</span><br><span class="line">                out[index++] &#x3D; base64en[ ( ( last_c &amp; 0xf ) &lt;&lt; 2 ) | ((c &gt;&gt; 6) &amp; 0x3) ];</span><br><span class="line">                out[index++] &#x3D; base64en[c &amp; 0x3f];</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">        last_c &#x3D; c;</span><br><span class="line">    &#125;</span><br><span class="line">    if (len_data % 3 &#x3D;&#x3D; 1)&#123;</span><br><span class="line">        out[index++] &#x3D; base64en[(c &amp; 0x3) &lt;&lt; 4];</span><br><span class="line">        out[index++] &#x3D; base64_pad;</span><br><span class="line">        out[index++] &#x3D; base64_pad;</span><br><span class="line">    &#125; else if(len_data % 3 &#x3D;&#x3D; 2)&#123;</span><br><span class="line">        out[index++] &#x3D; base64en[(c &amp; 0xf) &lt;&lt; 2];</span><br><span class="line">        out[index++] &#x3D; base64_pad;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extern &quot;C&quot;</span><br><span class="line">JNIEXPORT jstring JNICALL</span><br><span class="line">Java_com_jrb_base64_MainActivity_base64enc(JNIEnv *env, jobject thiz, jstring str) &#123;</span><br><span class="line">    const char *data &#x3D; env-&gt;GetStringUTFChars(str,NULL);</span><br><span class="line">    char out[100] &#x3D; &#123;0&#125;;</span><br><span class="line">    base64_enc(data,out);</span><br><span class="line">    env-&gt;ReleaseStringUTFChars(str,data);</span><br><span class="line">    return env-&gt;NewStringUTF(out);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
     </div>
 
     
@@ -255,7 +257,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/RC4/" rel="tag"># RC4</a>
+              <a href="/tags/Base64/" rel="tag"># Base64</a>
           </div>
 
         
@@ -264,13 +266,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/04/05/MD5/" rel="prev" title="哈希算法">
-      <i class="fa fa-chevron-left"></i> 哈希算法
+    <a href="/2022/04/06/RC4/" rel="prev" title="RC4">
+      <i class="fa fa-chevron-left"></i> RC4
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/04/07/Base64/" rel="next" title="Base64">
-      Base64 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -330,7 +329,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#RC4"><span class="nav-number">1.</span> <span class="nav-text">RC4</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rc4的详解"><span class="nav-number">1.1.</span> <span class="nav-text">rc4的详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Android-Studio-实现"><span class="nav-number">1.2.</span> <span class="nav-text">Android Studio 实现</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base64"><span class="nav-number">1.</span> <span class="nav-text">Base64</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Android-Studio-实现简单base64的方法"><span class="nav-number">1.1.</span> <span class="nav-text">Android Studio 实现简单base64的方法</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -525,7 +524,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'https://jinrb.github.io/index.html',
       owner       : 'JinRongbin',
       admin       : ['germey'],
-      id          : 'b0d202802c667b61850b20a241582b3f',
+      id          : '4013f65ea4553bbc6d071c0257dfb5b3',
         language: 'zh-CN',
       distractionFreeMode: true
     });
